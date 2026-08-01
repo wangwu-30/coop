@@ -1,0 +1,14 @@
+# Minimal trust policy for cross-user coop collaboration.
+# Save as .agent-coop/policy.yaml to enforce.
+
+allowlist_actors:
+  - observer-pm
+  - impl-agent
+  - subagent-impl
+
+allowed_event_types:
+  - post_task
+  - claim_task
+  - update_task
+  - milestone
+  - send_message

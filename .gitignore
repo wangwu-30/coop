@@ -1,0 +1,11 @@
+node_modules/
+dist/
+*.log
+
+# Runtime coop state (never commit)
+.agent-coop/
+.agent-coop-runtime/
+
+# Generated planning/runtime outputs
+next-round.json
+.next-round.json

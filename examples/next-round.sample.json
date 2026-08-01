@@ -1,0 +1,56 @@
+{
+  "generated_at": "2026-03-06T00:00:00.000Z",
+  "planner": "optimizer-loop",
+  "actor": "observer-pm",
+  "inputs": {
+    "quality": {
+      "passed": true,
+      "current_issues": 0,
+      "source": "quality-json"
+    },
+    "event_summary": {
+      "task_count": 2,
+      "tasks_by_status": {
+        "open": 0,
+        "in_progress": 1,
+        "done": 1,
+        "blocked": 0,
+        "cancelled": 0,
+        "other": 0
+      },
+      "total_updates": 3,
+      "redundant_updates": 1,
+      "redundancy_ratio": 0.3333
+    },
+    "thresholds": {
+      "redundancy_gain": 0.15
+    }
+  },
+  "decision": {
+    "action": "continue",
+    "reason": "redundancy_gain_above_threshold",
+    "continue": true
+  },
+  "suggested_tasks": {
+    "A": {
+      "lane": "stability",
+      "title": "Address current issues and quality blockers",
+      "when": "current_issues > 0 or quality gate failed",
+      "acceptance_template": [
+        "all current_issues reduced to 0",
+        "quality gate passes",
+        "evidence chain updated in coop logs"
+      ]
+    },
+    "B": {
+      "lane": "efficiency",
+      "title": "Reduce redundant coordination churn",
+      "when": "quality gate passed and redundancy gain still above threshold",
+      "acceptance_template": [
+        "redundancy_ratio reduced below threshold",
+        "observer loop latency decreased",
+        "next-round planner output remains schema-stable"
+      ]
+    }
+  }
+}

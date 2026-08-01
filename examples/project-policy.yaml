@@ -1,0 +1,42 @@
+version: "0.1"
+name: "agent-coop-mvp-policy"
+
+truth_model:
+  source_of_truth: git
+  canonical_paths:
+    tasks: cooperation/tasks
+    messages: cooperation/messages
+  rule: "If memory/cache conflicts with git files, git is authoritative."
+
+topology:
+  local_workspace: "Each agent uses its own clone/worktree"
+  remote_workspace: "Shared git remote for cross-agent sync"
+  sync_cycle:
+    - pull
+    - edit
+    - commit
+    - push
+
+memory_bridge:
+  enabled: false
+  mode: advisory_only
+  note: "Allowed for recommendation/context only; never for canonical task state"
+
+task_contract:
+  required_frontmatter:
+    - status
+    - priority
+    - created_by
+    - assignee
+    - created
+    - updated
+    - tags
+    - depends_on
+    - version
+  status_flow:
+    - open
+    - in_progress
+    - done
+  optional_status:
+    - blocked
+    - cancelled

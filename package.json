@@ -1,0 +1,58 @@
+{
+  "name": "agent-coop",
+  "version": "0.1.0",
+  "description": "Agent cooperation via MCP Server + git sync",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "agent-coop": "dist/index.js",
+    "agent-coop-cli": "dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "start": "node dist/index.js",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "validate:coop": "node scripts/validate-coop-frontmatter.mjs",
+    "replay:events": "node scripts/replay-audit-events.mjs --mode replay",
+    "audit:events": "node scripts/replay-audit-events.mjs --mode audit",
+    "check:runtime-boundary": "node scripts/check-runtime-boundary.mjs",
+    "coop:min:plan": "node dist/coop-min/cli.js plan",
+    "coop:min:dispatch": "node dist/coop-min/cli.js dispatch",
+    "coop:min:run": "node dist/coop-min/cli.js run",
+    "coop:min:publish": "node dist/coop-min/cli.js publish",
+    "coop:min:heartbeat": "node dist/coop-min/cli.js heartbeat",
+    "coop:init": "node dist/cli.js init",
+    "coop:state": "node dist/global-state-cli.js",
+    "coop:watch": "node dist/global-state-cli.js --watch",
+    "coop:push": "node dist/cli.js push",
+    "quality:check": "node scripts/quality-gate-automation.mjs",
+    "quality:check:json": "node scripts/quality-gate-automation.mjs --json",
+    "quality:check:alerts": "node scripts/quality-gate-automation.mjs --alerts-only",
+    "quality:precheck:noop": "node scripts/noop-update-precheck-alert.mjs",
+    "audit:ops-summary": "node scripts/event-audit-ops-summary.mjs",
+    "audit:actor-enforce": "node scripts/generic-actor-enforcer.mjs --fail-on-generic",
+    "quality:gate": "npm run check:runtime-boundary && npm run test && npm run build && npm run validate:coop -- --strict-zero-files && node scripts/write-quality-evidence.mjs",
+    "quality:gate:parallel": "npm run check:runtime-boundary & npm run test & npm run build & wait && npm run validate:coop -- --strict-zero-files && node scripts/write-quality-evidence.mjs"
+  },
+  "keywords": [
+    "mcp",
+    "coop",
+    "agent",
+    "tasks",
+    "messaging"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.1",
+    "yaml": "^2.7.1",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.0",
+    "@vitest/coverage-v8": "^4.0.18",
+    "typescript": "^5.8.3",
+    "vitest": "^4.0.18"
+  }
+}
