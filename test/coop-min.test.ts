@@ -3,7 +3,8 @@ import * as fs from 'node:fs/promises';
 import * as os from 'node:os';
 import * as path from 'node:path';
 import { coopInit } from '../src/tools/init.js';
-import { gitAddAndCommit } from '../src/storage/git.js';
+import { coopPostTask } from '../src/tools/coop.js';
+import { getGitRevision, gitAddAndCommit } from '../src/storage/git.js';
 import { runCoopMinPlanner } from '../src/coop-min/planner.js';
 import { buildCoopMinDispatch } from '../src/coop-min/dispatch.js';
 import { publishCoopMinTasks } from '../src/coop-min/publish.js';
@@ -11,7 +12,7 @@ import { publishCoopMinTasks } from '../src/coop-min/publish.js';
 let tmpDir: string;
 const originalCoopDir = process.env.AGENT_COOP_DIR;
 
-async function writeQuality(passed: boolean, currentIssues: number) {
+async function writeQuality(passed: boolean, currentIssues: number, includeCheckedCommit = false) {
   const relativePath = 'cooperation/runtime/quality-gate-status.json';
   const fullPath = path.join(tmpDir, relativePath);
   await fs.mkdir(path.dirname(fullPath), { recursive: true });
@@ -19,6 +20,7 @@ async function writeQuality(passed: boolean, currentIssues: number) {
     passed,
     current_issues: currentIssues,
     checked_at: new Date().toISOString(),
+    checked_commit: includeCheckedCommit ? await getGitRevision('HEAD', tmpDir) : undefined,
     source: 'test',
   }), 'utf8');
   await gitAddAndCommit([relativePath], 'test: quality evidence', tmpDir);
@@ -50,6 +52,22 @@ describe('coop-min observer', () => {
     expect(summary.decision).toBe('stop');
     expect(summary.reason).toBe('no_actionable_findings');
     expect(summary.suggested_tasks).toEqual([]);
+  });
+
+  it('accepts committed evidence for its parent revision and invalidates it after task changes', async () => {
+    await writeQuality(true, 0, true);
+    const healthy = await runCoopMinPlanner({ coopDir: tmpDir });
+    expect(healthy.decision).toBe('stop');
+    expect(healthy.input_issues).toEqual([]);
+
+    await coopPostTask({
+      title: 'Change after evidence',
+      body: 'invalidates the checked canonical state',
+      source: 'openclaw',
+    });
+    const stale = await runCoopMinPlanner({ coopDir: tmpDir });
+    expect(stale.decision).toBe('continue');
+    expect(stale.input_issues.some((issue) => issue.includes('quality evidence covers'))).toBe(true);
   });
 
   it('publishes a dispatch once into the same canonical root', async () => {

@@ -3,6 +3,7 @@ import { parseTask, type TaskStatus } from '../schema/coop.js';
 import { listCoopFiles, readFile } from '../storage/fs.js';
 import {
   getCurrentBranch,
+  getGitDivergence,
   getGitRevision,
   getRemoteBranchRevision,
   gitFetch,
@@ -88,6 +89,25 @@ export async function coopGetGlobalState(input: GlobalStateInput = {}): Promise<
     ? await getRemoteBranchRevision(remote, input.branch ?? localBranch ?? undefined, coopDir)
     : { branch: null, ref: null, revision: null };
   const canonicalRevision = remoteState.revision ?? localRevision;
+  let revisionRelation: 'current' | 'local_ahead' | 'remote_ahead' | 'diverged' | 'local_only' | 'unknown' = 'unknown';
+  if (!remoteState.revision && localRevision) {
+    revisionRelation = 'local_only';
+  } else if (remoteState.revision && localRevision) {
+    if (remoteState.revision === localRevision) {
+      revisionRelation = 'current';
+    } else {
+      try {
+        const divergence = await getGitDivergence(localRevision, remoteState.revision, coopDir);
+        revisionRelation = divergence.ahead > 0 && divergence.behind > 0
+          ? 'diverged'
+          : divergence.ahead > 0
+            ? 'local_ahead'
+            : 'remote_ahead';
+      } catch {
+        revisionRelation = 'unknown';
+      }
+    }
+  }
   const revisionChanged = Boolean(
     input.last_seen_commit &&
     canonicalRevision &&
@@ -109,6 +129,7 @@ export async function coopGetGlobalState(input: GlobalStateInput = {}): Promise<
     local_revision: localRevision,
     remote_revision: remoteState.revision,
     canonical_revision: canonicalRevision,
+    revision_relation: revisionRelation,
     local_is_current: !remoteState.revision || remoteState.revision === localRevision,
     worktree_dirty: await isGitWorktreeDirty(coopDir),
     revision_changed: revisionChanged,

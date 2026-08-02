@@ -1,12 +1,21 @@
 # agent-coop
 
-A fresh-start git-native cooperation kernel for OpenClaw.
+A Git-native cooperation core for Codex, Claude Code, OpenClaw and other
+Agent clients. MCP is the default typed adapter; the same core is also exposed
+through a CLI.
+
+```text
+Codex / Claude Code / CI -> MCP or CLI -> agent-coop core -> Git
+```
+
+See [QUICKSTART.md](QUICKSTART.md) for installation and
+[ARCHITECTURE.md](ARCHITECTURE.md) for boundaries and failure handling.
 
 ## What this is now
 
 这是一次**从头重做**的 coop，不是旧 flywheel 的修补版。
 
-核心模型只有三件事：
+核心模型只有四件事：
 
 - **Observer**：观察任务池和质量状态，只在必要时发布少量真实任务
 - **Workers**：领取、执行、回写任务
@@ -31,6 +40,7 @@ A fresh-start git-native cooperation kernel for OpenClaw.
 5. **No automatic rebalance / seed / activation / stale-heal**
 6. **If system is stable, it should stop**
 7. **Messages request action; task state authorizes action**
+8. **MCP is replaceable; Git and core invariants are not**
 
 ---
 
@@ -45,6 +55,10 @@ All processes resolve one canonical cooperation root:
 There is no implicit `~/.agent-coop` fallback. Observer, MCP tools, tasks,
 messages, events and dispatch receipts therefore operate on the same root.
 
+One machine may run Codex and Claude Code against the same physical checkout:
+all Git mutations are repository-wide serialized. Across machines, use
+independent checkouts of the same remote branch.
+
 For a business repository, the recommended default is one Git remote with a
 dedicated `coop-state` branch and worktree. Business changes stay on feature
 branches; coordination changes stay on `coop-state`.
@@ -53,6 +67,21 @@ Use a separate cooperation repository only for multi-repository coordination
 or when access and retention policies must differ from the business code.
 
 ---
+
+## Install Codex and Claude Code
+
+```bash
+npm install -g github:wangwu-30/coop
+
+coop init --coop-dir /path/to/coop-state --remote <git-url>
+coop push --coop-dir /path/to/coop-state
+coop install --client both --project-dir /path/to/business-repo --coop-dir /path/to/coop-state
+coop doctor --client both --project-dir /path/to/business-repo --coop-dir /path/to/coop-state
+```
+
+The installer preserves existing `.codex/config.toml`, `.mcp.json`,
+`AGENTS.md` and `CLAUDE.md` content and owns only marked sections or the
+`agent-coop` MCP entry.
 
 ## Current commands
 
@@ -79,6 +108,8 @@ Read the global Git cursor once, or watch it continuously:
 ```bash
 npm run coop:state -- --coop-dir /path/to/coop-worktree
 npm run coop:watch -- --coop-dir /path/to/coop-worktree --interval-ms 5000
+coop task list --coop-dir /path/to/coop-worktree --status open
+coop message inbox --coop-dir /path/to/coop-worktree --agent-id codex
 ```
 
 `canonical_revision` is the global cursor. Webhooks may wake agents faster,
@@ -92,10 +123,13 @@ npm run quality:gate
 
 ---
 
-## Runtime outputs
+## Runtime and canonical outputs
 
 - `coop-min/state/observer-summary.json`
 - `coop-min/state/dispatch.json`
+
+These two planner outputs are ignored local runtime data. Published tasks,
+messages, receipts, quality evidence and event logs are canonical Git state.
 
 If publish happens, task files are written to:
 - `cooperation/tasks/`
@@ -133,6 +167,8 @@ read/ack/reject receipt. A message never changes task ownership or status.
 This repo is now centered on the new cooperation kernel in:
 
 - `src/coop-min/*`
+- `src/core/*`
+- `src/adapters/*`
 - `src/tools/coop.ts`
 - `src/schema/*`
 - `src/storage/*`

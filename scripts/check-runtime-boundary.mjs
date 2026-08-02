@@ -3,7 +3,7 @@
 import { execFileSync } from "node:child_process";
 import path from "node:path";
 
-const RUNTIME_FORBIDDEN_PREFIXES = [".agent-coop/"];
+const RUNTIME_FORBIDDEN_PREFIXES = [".agent-coop/", "coop-min/state/"];
 const RUNTIME_FORBIDDEN_FILES = new Set(["next-round.json", ".next-round.json"]);
 
 function getTrackedFiles() {

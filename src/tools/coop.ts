@@ -19,7 +19,7 @@ import {
   listFilesWithSuffix,
   fileExists,
   removeFile,
-  withMutationLock,
+  withCanonicalMutationLock,
 } from "../storage/fs.js";
 import { getGitRevision, gitAddAndCommit } from "../storage/git.js";
 import {
@@ -462,65 +462,67 @@ export async function coopPostTask(input: {
   source: string;
 }): Promise<string> {
   const coopDir = getCoopDir();
-  const now = new Date().toISOString();
-  const slug = taskSlug(input.source, input.title);
-  const relativePath = path.join("cooperation/tasks", `${slug}.md`);
+  return withCanonicalMutationLock(async () => {
+    const now = new Date().toISOString();
+    const slug = taskSlug(input.source, input.title);
+    const relativePath = path.join("cooperation/tasks", `${slug}.md`);
 
-  const task: Omit<CoopTask, "filePath"> = {
-    frontmatter: {
-      status: "open",
-      priority: input.priority ?? "medium",
-      created_by: input.source,
-      assignee: null,
-      created: now,
-      updated: now,
-      tags: input.tags ?? [],
-      depends_on: [],
-      version: 1,
-    },
-    title: input.title,
-    body: input.body,
-  };
-
-  try {
-    await persistFileAndEvent({
-      relativePath,
-      previousContent: null,
-      nextContent: serializeTask(task),
-      event: {
-        event_id: randomUUID(),
-        event_type: "post_task",
-        task_id: relativePath,
-        actor: input.source,
-        payload: {
-          title: input.title,
-          priority: task.frontmatter.priority,
-          tags: task.frontmatter.tags,
-        },
+    const task: Omit<CoopTask, "filePath"> = {
+      frontmatter: {
+        status: "open",
+        priority: input.priority ?? "medium",
+        created_by: input.source,
+        assignee: null,
+        created: now,
+        updated: now,
+        tags: input.tags ?? [],
+        depends_on: [],
+        version: 1,
       },
-      commitMessage: `coop: post task - ${input.title}`,
-      coopDir,
-    });
-  } catch (error) {
-    const policyError = trustPolicyErrorToResult(error);
-    if (policyError) return policyError;
-    throw error;
-  }
-  try {
-    await emitChat({
-      topic: "tasks",
-      actor: input.source,
-      event: "post_task",
-      task_id: relativePath,
-      payload: { title: input.title, priority: task.frontmatter.priority },
-    }, coopDir);
-  } catch {}
-  return JSON.stringify({ id: relativePath, title: input.title, status: "open", version: 1 });
+      title: input.title,
+      body: input.body,
+    };
+
+    try {
+      await persistFileAndEvent({
+        relativePath,
+        previousContent: null,
+        nextContent: serializeTask(task),
+        event: {
+          event_id: randomUUID(),
+          event_type: "post_task",
+          task_id: relativePath,
+          actor: input.source,
+          payload: {
+            title: input.title,
+            priority: task.frontmatter.priority,
+            tags: task.frontmatter.tags,
+          },
+        },
+        commitMessage: `coop: post task - ${input.title}`,
+        coopDir,
+      });
+    } catch (error) {
+      const policyError = trustPolicyErrorToResult(error);
+      if (policyError) return policyError;
+      throw error;
+    }
+    try {
+      await emitChat({
+        topic: "tasks",
+        actor: input.source,
+        event: "post_task",
+        task_id: relativePath,
+        payload: { title: input.title, priority: task.frontmatter.priority },
+      }, coopDir);
+    } catch {}
+    return JSON.stringify({ id: relativePath, title: input.title, status: "open", version: 1 });
+  }, coopDir);
 }
 
 export async function coopClaimTask(input: { task_id: string; assignee: string; expected_version?: number; }): Promise<string> {
   const coopDir = getCoopDir();
-  return withMutationLock(`task:${input.task_id}`, async () => {
+  return withCanonicalMutationLock(async () => {
     const raw = await readFile(input.task_id, coopDir);
     const task = parseTask(raw, input.task_id);
 
@@ -588,7 +590,7 @@ export async function coopUpdateTask(input: {
   expected_version?: number;
 }): Promise<string> {
   const coopDir = getCoopDir();
-  return withMutationLock(`task:${input.task_id}`, async () => {
+  return withCanonicalMutationLock(async () => {
     const raw = await readFile(input.task_id, coopDir);
     const task = parseTask(raw, input.task_id);
 
@@ -701,51 +703,51 @@ export async function coopLogMilestone(input: {
   expected_version?: number;
 }): Promise<string> {
   const coopDir = getCoopDir();
-  const raw = await readFile(input.task_id, coopDir);
-  const task = parseTask(raw, input.task_id);
+  return withCanonicalMutationLock(async () => {
+    const raw = await readFile(input.task_id, coopDir);
+    const task = parseTask(raw, input.task_id);
 
-  const versionConflict = ensureVersionMatch(task.frontmatter.version, input.expected_version);
-  if (versionConflict) return versionConflict;
+    const versionConflict = ensureVersionMatch(task.frontmatter.version, input.expected_version);
+    if (versionConflict) return versionConflict;
 
-  let eventLogPath: string;
-  try {
-    eventLogPath = await appendEventLog({
-      event_type: "milestone",
-      task_id: input.task_id,
-      actor: input.actor,
-      payload: {
-        milestone: input.milestone,
-        status: input.status ?? task.frontmatter.status,
-        expected_version: input.expected_version,
-        current_version: task.frontmatter.version,
-      },
-    }, coopDir);
-  } catch (error) {
-    const policyError = trustPolicyErrorToResult(error);
-    if (policyError) return policyError;
-    throw error;
-  }
+    let eventLogPath: string;
+    try {
+      eventLogPath = await appendEventLog({
+        event_type: "milestone",
+        task_id: input.task_id,
+        actor: input.actor,
+        payload: {
+          milestone: input.milestone,
+          status: input.status ?? task.frontmatter.status,
+          expected_version: input.expected_version,
+          current_version: task.frontmatter.version,
+        },
+      }, coopDir);
+    } catch (error) {
+      const policyError = trustPolicyErrorToResult(error);
+      if (policyError) return policyError;
+      throw error;
+    }
 
-  try {
-    await emitChat({
-      topic: "tasks",
-      actor: input.actor,
-      event: "milestone",
-      task_id: input.task_id,
-      payload: { milestone: input.milestone, status: input.status ?? task.frontmatter.status },
-    }, coopDir);
-  } catch {}
+    try {
+      await emitChat({
+        topic: "tasks",
+        actor: input.actor,
+        event: "milestone",
+        task_id: input.task_id,
+        payload: { milestone: input.milestone, status: input.status ?? task.frontmatter.status },
+      }, coopDir);
+    } catch {}
 
-  try {
     await gitAddAndCommit([eventLogPath], `coop: milestone - ${task.title}`, coopDir);
-  } catch {}
 
-  return JSON.stringify({
-    id: input.task_id,
-    milestone: input.milestone,
-    status: input.status ?? task.frontmatter.status,
-    version: task.frontmatter.version,
-  });
+    return JSON.stringify({
+      id: input.task_id,
+      milestone: input.milestone,
+      status: input.status ?? task.frontmatter.status,
+      version: task.frontmatter.version,
+    });
+  }, coopDir);
 }
 
 export async function coopGetTask(input: { task_id: string }): Promise<string> {
@@ -1082,7 +1084,7 @@ export async function coopSendMessage(input: SendMessageInput): Promise<string> 
     }
   }
 
-  return withMutationLock(`message-dedupe:${input.from}:${dedupeKey}`, async () => {
+  return withCanonicalMutationLock(async () => {
     const existing = await findMessageByDedupeKey(input.from, dedupeKey, coopDir);
     if (existing) {
       const samePayload = existing.frontmatter.to === (input.to ?? null)
@@ -1221,7 +1223,7 @@ export async function coopAcknowledgeMessage(input: {
   }
 
   const receiptPath = messageReceiptPath(fm.message_id, input.actor, status);
-  return withMutationLock(`message-receipt:${fm.message_id}:${input.actor}:${status}`, async () => {
+  return withCanonicalMutationLock(async () => {
     if (await fileExists(receiptPath, coopDir)) {
       return JSON.stringify({
         message_id: fm.message_id,
@@ -1380,7 +1382,9 @@ export async function coopCheckInbox(input: {
   const myTasks = JSON.parse(await coopListTasks({ status: "in_progress", assignee: input.agent_id }));
   const allMessages = JSON.parse(await coopReadMessages({ recipient: input.agent_id }));
   const unreadMessages = allMessages.messages.filter((message: { is_read?: boolean }) => !message.is_read);
-  const syncRequired = globalState?.local_is_current === false;
+  const revisionRelation = globalState?.revision_relation;
+  const syncRequired = revisionRelation === "remote_ahead" || revisionRelation === "diverged";
+  const publishRequired = revisionRelation === "local_ahead";
 
   return JSON.stringify({
     summary: {
@@ -1388,6 +1392,8 @@ export async function coopCheckInbox(input: {
       my_active_tasks: myTasks.count,
       unread_messages: unreadMessages.length,
       sync_required: syncRequired,
+      publish_required: publishRequired,
+      reconciliation_required: revisionRelation === "diverged",
     },
     global_state: globalState,
     open_tasks: openTasks.tasks,

@@ -20,13 +20,81 @@ export async function getGitRevision(ref = "HEAD", coopDir?: string): Promise<st
 
 export async function isGitWorktreeDirty(coopDir?: string): Promise<boolean> {
   try {
-    const { stdout } = await git(["status", "--porcelain", "--", "cooperation", "logs", "config.yaml", "policy.yaml"], coopDir);
+    const { stdout } = await git([
+      "status",
+      "--porcelain",
+      "--",
+      "cooperation",
+      "logs",
+      "config.yaml",
+      "policy.yaml",
+    ], coopDir);
     return stdout.trim().length > 0;
   } catch {
     // A caller must never mistake an unreadable/non-Git state directory for a
     // clean coordination snapshot.
     return true;
   }
+}
+
+export async function isGitWorktreeCompletelyDirty(coopDir?: string): Promise<boolean> {
+  try {
+    const { stdout } = await git(["status", "--porcelain", "--untracked-files=all"], coopDir);
+    return stdout
+      .split("\n")
+      .map((line) => line.trimEnd())
+      .filter(Boolean)
+      .some((line) => {
+        const file = line.slice(3).replace(/^"|"$/g, "");
+        return !file.startsWith(".agent-coop-runtime/");
+      });
+  } catch {
+    return true;
+  }
+}
+
+export async function getGitMergeBase(
+  leftRevision: string,
+  rightRevision: string,
+  coopDir?: string,
+): Promise<string | null> {
+  try {
+    const { stdout } = await git(["merge-base", leftRevision, rightRevision], coopDir);
+    return stdout.trim() || null;
+  } catch {
+    return null;
+  }
+}
+
+export async function getGitDivergence(
+  localRevision: string,
+  remoteRevision: string,
+  coopDir?: string,
+): Promise<{ ahead: number; behind: number }> {
+  const { stdout } = await git([
+    "rev-list",
+    "--left-right",
+    "--count",
+    `${localRevision}...${remoteRevision}`,
+  ], coopDir);
+  const [aheadText = "0", behindText = "0"] = stdout.trim().split(/\s+/);
+  return {
+    ahead: Number.parseInt(aheadText, 10) || 0,
+    behind: Number.parseInt(behindText, 10) || 0,
+  };
+}
+
+export async function listAllChangedFiles(
+  fromRevision: string,
+  toRevision: string,
+  coopDir?: string,
+): Promise<string[]> {
+  const { stdout } = await git(["diff", "--name-only", `${fromRevision}..${toRevision}`], coopDir);
+  return stdout.split("\n").map((line) => line.trim()).filter(Boolean);
+}
+
+export async function gitResetHard(revision: string, coopDir?: string): Promise<void> {
+  await git(["reset", "--hard", revision], coopDir);
 }
 
 export async function listFilesAtRevision(

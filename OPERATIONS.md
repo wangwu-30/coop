@@ -43,8 +43,20 @@ Rules:
 - update status honestly
 - block when blocked, do not fake throughput
 
-Two local claims are serialized by a task lock. Across machines, a rejected
-push means the worker must fetch, re-read the task and retry the decision.
+All local Git mutations are serialized by a repository-wide lock. Across
+machines, a rejected push means the worker must inspect the local candidate,
+discard it only when it contains cooperation state exclusively, fetch, re-read
+the task and retry the decision.
+
+```bash
+coop reconcile --coop-dir /path/to/coop-worktree
+coop reconcile --coop-dir /path/to/coop-worktree \
+  --discard-local-candidate \
+  --expected-local-revision <sha>
+```
+
+Automatic discard refuses dirty worktrees and commits that contain business
+files. Coordination decisions are never silently rebased.
 
 ---
 
@@ -74,6 +86,18 @@ Use a webhook to wake the watcher quickly, but retain polling as the repair path
 - after receiving a message, refresh Git state and validate the task again
 - do not use messages for claims, completion, heartbeats or synthetic activity
 - if `coop_check_inbox` reports `sync_required`, sync before acting
+
+## Client installation health
+
+```bash
+coop doctor \
+  --client both \
+  --project-dir /path/to/business-repo \
+  --coop-dir /path/to/coop-worktree
+```
+
+Run this after installation, after moving a checkout, or when either client
+cannot see MCP tools.
 
 ---
 

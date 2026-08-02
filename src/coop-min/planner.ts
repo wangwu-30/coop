@@ -2,7 +2,25 @@ import type { CoopMinObserverSummary, CoopMinSuggestedTask, CoopMinTaskSummary }
 import { getCoopDir } from '../config.js';
 import { parseTask } from '../schema/coop.js';
 import { listCoopFiles, readFile, writeFile } from '../storage/fs.js';
-import { getGitRevision, isGitWorktreeDirty } from '../storage/git.js';
+import {
+  getGitMergeBase,
+  getGitRevision,
+  isGitWorktreeDirty,
+  listAllChangedFiles,
+} from '../storage/git.js';
+
+async function qualityEvidenceCoversRevision(
+  checkedCommit: string,
+  currentCommit: string,
+  qualityFile: string,
+  coopDir: string,
+): Promise<boolean> {
+  if (checkedCommit === currentCommit) return true;
+  const mergeBase = await getGitMergeBase(checkedCommit, currentCommit, coopDir);
+  if (mergeBase !== checkedCommit) return false;
+  const changedFiles = await listAllChangedFiles(checkedCommit, currentCommit, coopDir);
+  return changedFiles.length > 0 && changedFiles.every((file) => file === qualityFile);
+}
 
 async function loadTasks(coopDir: string): Promise<{ tasks: CoopMinTaskSummary[]; issues: string[] }> {
   const files = await listCoopFiles('tasks', coopDir);
@@ -81,12 +99,16 @@ export async function runCoopMinPlanner({
   ]);
   const inputIssues = [...taskIssues, ...qualityIssues];
   if (quality.worktree_dirty === true) inputIssues.push('quality evidence was produced from a dirty worktree');
-  if (
-    typeof quality.checked_commit === 'string' &&
-    sourceCommit &&
-    quality.checked_commit !== sourceCommit
-  ) {
-    inputIssues.push(`quality evidence covers ${quality.checked_commit}, current commit is ${sourceCommit}`);
+  if (typeof quality.checked_commit === 'string' && sourceCommit) {
+    const covered = await qualityEvidenceCoversRevision(
+      quality.checked_commit,
+      sourceCommit,
+      qualityFile,
+      coopDir,
+    );
+    if (!covered) {
+      inputIssues.push(`quality evidence covers ${quality.checked_commit}, current commit is ${sourceCommit}`);
+    }
   }
 
   const openTasks = tasks.filter((task) => task.status === 'open');

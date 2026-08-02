@@ -39,7 +39,7 @@ export interface CoopConfig {
 }
 
 const DEFAULT_CONFIG: CoopConfig = {
-  version: "0.1.0",
+  version: "0.2.0",
   agents: ["claude-code", "cursor", "codex", "openclaw"],
   memoryBridge: {
     enabled: false,

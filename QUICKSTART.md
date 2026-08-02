@@ -1,135 +1,136 @@
-# Quickstart
+# Quickstart: Codex + Claude Code
 
-## 1. Install and build
+## 1. Install the tool
+
+Until an npm release is published, install directly from GitHub:
 
 ```bash
-npm install
+npm install -g github:wangwu-30/coop
+coop --help
+```
+
+For local development:
+
+```bash
+git clone https://github.com/wangwu-30/coop.git
+cd coop
+npm ci
 npm run build
+npm link
 ```
 
-## 2. Choose one canonical cooperation root
+## 2. Choose the canonical cooperation checkout
 
-For a small single-branch experiment, the business repository itself can be
-the root. For normal multi-agent work, use a dedicated branch/worktree in the
-same remote:
+For one business repository, use a dedicated `coop-state` branch. Business
+changes stay on feature branches; coordination commits stay on `coop-state`.
 
 ```bash
-git branch coop-state
-git worktree add ../my-project-coop coop-state
+git -C /path/to/business-repo branch coop-state
+git -C /path/to/business-repo push origin coop-state
+git -C /path/to/business-repo worktree add ../business-coop-state coop-state
 ```
 
-Every Agent must point to that same logical root:
+On one machine, Codex and Claude Code may share this checkout because Git
+mutations are repository-wide serialized. On different machines, give each
+Agent its own clone of the same remote branch.
+
+Use a separate cooperation repository only for multi-repository coordination
+or when access and retention policy must differ from business code.
+
+## 3. Initialize once
 
 ```bash
-export AGENT_COOP_DIR=/absolute/path/to/my-project-coop
+coop init \
+  --coop-dir /absolute/path/to/business-coop-state \
+  --remote <business-git-remote-url>
+
+coop push --coop-dir /absolute/path/to/business-coop-state
 ```
 
-An explicit `--coop-dir` takes precedence. If neither is provided, the current
-working directory is used. The system never silently falls back to a home
-directory repository.
+## 4. Install both client adapters
 
-## 3. Initialize
+Run this from the business project root:
 
 ```bash
-npm run coop:init -- --coop-dir "$AGENT_COOP_DIR"
+coop install \
+  --client both \
+  --project-dir /absolute/path/to/business-repo \
+  --coop-dir /absolute/path/to/business-coop-state
 ```
 
-With a shared remote:
+This safely creates or updates:
+
+- `.codex/config.toml` and the managed section in `AGENTS.md`
+- `.mcp.json` and the managed section in `CLAUDE.md`
+
+Existing content is preserved. Paths are machine-local, so every developer
+must run installation on their own machine. Claude Code asks for approval
+before using a project-scoped MCP server.
+
+## 5. Diagnose
 
 ```bash
-npm run coop:init -- --coop-dir "$AGENT_COOP_DIR" --remote <git-remote-url>
+coop doctor \
+  --client both \
+  --project-dir /absolute/path/to/business-repo \
+  --coop-dir /absolute/path/to/business-coop-state
 ```
 
-When installed as an MCP server, call `coop_init` instead. Start the MCP stdio
-server with `npm start` or the `agent-coop` binary.
+Restart Codex/Claude Code, then inspect MCP connections with `codex mcp list`,
+`claude mcp list`, or `/mcp` inside either client.
 
-## 4. Produce fresh quality evidence
+## 6. Agent lifecycle
+
+At session start:
+
+1. `coop_sync`
+2. `coop_check_inbox`
+3. `coop_get_global_state`
+4. `coop_list_tasks`
+
+Before business work:
+
+1. read the task and its version;
+2. `coop_claim_task(expected_version=...)`;
+3. `coop_publish_state`;
+4. continue only when `pushed=true`.
+
+After work:
+
+1. `coop_update_task(status="done" | "blocked", expected_version=...)`;
+2. send review/handoff messages when needed;
+3. `coop_publish_state`.
+
+## 7. Resolve a rejected push
+
+Inspect first:
 
 ```bash
-npm run quality:gate
+coop reconcile --coop-dir /absolute/path/to/business-coop-state
 ```
 
-The Observer fails closed when quality evidence is missing, invalid or older
-than 24 hours. Commit the generated
-`cooperation/runtime/quality-gate-status.json` on the coordination branch before
-running the Observer; an uncommitted canonical state is intentionally rejected.
-
-## 5. Observer loop
+If `candidate_is_cooperation_only=true`, explicitly discard the rejected
+candidate using the exact revision returned by inspection:
 
 ```bash
-npm run coop:min:run -- --coop-dir "$AGENT_COOP_DIR"
-npm run coop:min:publish -- --coop-dir "$AGENT_COOP_DIR"
+coop reconcile \
+  --coop-dir /absolute/path/to/business-coop-state \
+  --discard-local-candidate \
+  --expected-local-revision <local_revision>
 ```
 
-Publication is idempotent: a stable `dispatch_id` and a tracked receipt prevent
-the same observation from creating duplicate tasks.
+Then sync, re-read the task/inbox, and retry the high-level decision. The tool
+refuses to discard candidates containing business files.
 
-## 6. Worker loop
+## 8. CLI fallback
 
-Use MCP tools to:
-
-1. `coop_list_tasks`
-2. `coop_claim_task` with `expected_version`
-3. execute the business change in a feature worktree
-4. `coop_update_task` to `done` or `blocked`
-5. `coop_publish_state` (or `npm run coop:push`) and require `pushed=true`
-
-Local concurrent mutations are serialized. Across machines, the shared remote
-branch is the final compare-and-swap boundary. A local claim is only a candidate;
-do not start business work until its fast-forward push succeeds. On
-`remote_conflict`, fetch, re-read the task and retry the decision.
-
-## 7. Agent coordination messages
-
-Use `coop_send_message` for blocking questions, reviews and handoffs. A message
-linked to a task must include the task version that the sender observed:
-
-```json
-{
-  "from": "coop-worker-1",
-  "to": "coop-worker-2",
-  "kind": "review_request",
-  "subject": "Review task result",
-  "body": "Please review the attached evidence.",
-  "task_id": "cooperation/tasks/task-123.md",
-  "expected_task_version": 2,
-  "requires_ack": true,
-  "dedupe_key": "task-123-review-v2"
-}
-```
-
-The recipient calls `coop_ack_message` with `read`, `ack` or `reject`. Receipts
-are immutable files; reading a broadcast never rewrites the original message.
-Before acknowledging an actionable task-linked message, the current task
-version is checked again. Messages request action but never grant task
-ownership—claim/publish rules still apply.
-
-`coop_check_inbox` fetches remote revision metadata but does not silently
-rebase. If it reports `sync_required=true`, sync the coordination worktree and
-re-read the inbox before acting.
-
-## 8. Global update awareness
-
-One-shot state:
+MCP is optional. Humans, CI and Agents without MCP can use the same core:
 
 ```bash
-npm run coop:state -- --coop-dir "$AGENT_COOP_DIR"
-```
-
-Continuous polling:
-
-```bash
-npm run coop:watch -- --coop-dir "$AGENT_COOP_DIR" --interval-ms 5000
-```
-
-Agents store `canonical_revision` as `last_seen_commit`. On change, the result
-contains the affected task files. A Git webhook can trigger this check sooner;
-polling remains the recovery path when webhook delivery is lost.
-
-## 9. Validate and audit
-
-```bash
-npm run validate:coop -- --strict-zero-files
-npm run replay:events -- --file logs/events-YYYY-MM-DD.jsonl
-npm run audit:events -- --file logs/events-YYYY-MM-DD.jsonl
+coop task list --coop-dir /path/to/coop-state --status open
+coop task claim --coop-dir /path/to/coop-state \
+  --task-id cooperation/tasks/task.md \
+  --assignee codex \
+  --expected-version 1
+coop push --coop-dir /path/to/coop-state
 ```

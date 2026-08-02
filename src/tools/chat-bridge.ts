@@ -4,6 +4,7 @@ import { getCoopDir, loadConfig } from "../config.js";
 import { appendEventLog, trustPolicyErrorToResult } from "../storage/events.js";
 import { gitAddAndCommit } from "../storage/git.js";
 import { normalizeAndValidateEvent } from "../schema/events.js";
+import { withCanonicalMutationLock } from "../storage/fs.js";
 
 export interface EmitChatInput {
   topic: string;
@@ -54,39 +55,39 @@ export async function emitChat(input: EmitChatInput, coopDir?: string): Promise<
 
 export async function ingestChatDecision(input: IngestChatDecisionInput, coopDir?: string): Promise<string> {
   const dir = coopDir ?? getCoopDir();
-  let eventLogPath: string;
-  try {
-    eventLogPath = await appendEventLog(
-      {
-        event_type: "ingest_chat_decision",
-        actor: input.actor,
-        task_id: input.task_id,
-        message_id: input.message_id,
-        payload: {
-          source: input.source,
-          decision: input.decision,
-          metadata: input.metadata ?? {},
+  return withCanonicalMutationLock(async () => {
+    let eventLogPath: string;
+    try {
+      eventLogPath = await appendEventLog(
+        {
+          event_type: "ingest_chat_decision",
+          actor: input.actor,
+          task_id: input.task_id,
+          message_id: input.message_id,
+          payload: {
+            source: input.source,
+            decision: input.decision,
+            metadata: input.metadata ?? {},
+          },
         },
-      },
-      dir,
-    );
-  } catch (error) {
-    const policyError = trustPolicyErrorToResult(error);
-    if (policyError) return policyError;
-    throw error;
-  }
+        dir,
+      );
+    } catch (error) {
+      const policyError = trustPolicyErrorToResult(error);
+      if (policyError) return policyError;
+      throw error;
+    }
 
-  try {
     await gitAddAndCommit(
       [eventLogPath],
       `coop: ingest chat decision from ${input.source}`,
       dir,
     );
-  } catch {}
 
-  return JSON.stringify({
-    ingested: true,
-    persisted_event_log: eventLogPath,
-    note: "Chat decisions are append-only in Git event log.",
-  });
+    return JSON.stringify({
+      ingested: true,
+      persisted_event_log: eventLogPath,
+      note: "Chat decisions are append-only in Git event log.",
+    });
+  }, dir);
 }

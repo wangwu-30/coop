@@ -3,6 +3,7 @@ import { defineConfig } from "vitest/config";
 export default defineConfig({
   test: {
     include: ["test/**/*.test.ts"],
+    setupFiles: ["test/setup-env.ts"],
     // These suites cover the retired self-healing flywheel kept under legacy/.
     // The active quality gate exercises the new cooperation kernel only.
     exclude: [

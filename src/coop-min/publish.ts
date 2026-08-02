@@ -9,7 +9,7 @@ import {
   fileExists,
   readFile,
   removeFile,
-  withMutationLock,
+  withCanonicalMutationLock,
   writeFile,
 } from '../storage/fs.js';
 import { gitAddAndCommit } from '../storage/git.js';
@@ -38,7 +38,7 @@ export async function publishCoopMinTasks({
     return { published: 0, task_ids: [], reason: 'nothing_to_publish', dispatch_id: dispatch.dispatch_id };
   }
 
-  return withMutationLock(`dispatch:${dispatch.dispatch_id}`, async () => {
+  return withCanonicalMutationLock(async () => {
     const receiptPath = path.join('cooperation', 'dispatch-receipts', `${dispatch.dispatch_id}.json`);
     if (await fileExists(receiptPath, coopDir)) {
       const receipt = JSON.parse(await readFile(receiptPath, coopDir)) as { task_ids?: string[] };

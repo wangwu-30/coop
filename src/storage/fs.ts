@@ -105,6 +105,20 @@ export async function withMutationLock<T>(
   }
 }
 
+/**
+ * Serialize every mutation that can create a Git commit in one cooperation
+ * checkout. Per-task locks protect domain versions, but Git's index and HEAD
+ * are repository-wide resources, so different tasks must not commit at the
+ * same time either.
+ */
+export function withCanonicalMutationLock<T>(
+  operation: () => Promise<T>,
+  coopDir?: string,
+  options: { timeoutMs?: number; staleMs?: number } = {},
+): Promise<T> {
+  return withMutationLock("canonical-git-state", operation, coopDir, options);
+}
+
 export async function readFile(relativePath: string, coopDir?: string): Promise<string> {
   const dir = coopDir ?? getCoopDir();
   return fs.readFile(resolveSafePath(dir, relativePath), "utf-8");

@@ -5,6 +5,7 @@ dist/
 # Runtime coop state (never commit)
 .agent-coop/
 .agent-coop-runtime/
+coop-min/state/
 
 # Generated planning/runtime outputs
 next-round.json

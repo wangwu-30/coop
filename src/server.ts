@@ -1,9 +1,9 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
-import { coopInit } from "./tools/init.js";
-import { coopSync } from "./tools/sync.js";
-import { coopConfigureMemory } from "./tools/configure.js";
 import {
+  coopInit,
+  coopSync,
+  coopConfigureMemory,
   coopPostTask,
   coopClaimTask,
   coopUpdateTask,
@@ -15,14 +15,30 @@ import {
   coopAcknowledgeMessage,
   coopReadMessages,
   coopCheckInbox,
-} from "./tools/coop.js";
-import { MESSAGE_KINDS, MESSAGE_PRIORITIES } from "./schema/coop.js";
+  coopGetGlobalState,
+  coopPublishState,
+  coopReconcile,
+  MESSAGE_KINDS,
+  MESSAGE_PRIORITIES,
+} from "./core/index.js";
 import { emitChat, ingestChatDecision } from "./tools/chat-bridge.js";
-import { coopGetGlobalState } from "./tools/global-state.js";
-import { coopPublishState } from "./tools/publish-state.js";
+
+function mcpInstructions(): string {
+  const agentId = process.env.AGENT_COOP_AGENT_ID?.trim() || "the configured agent";
+  return [
+  `Your stable cooperation identity is ${agentId}. Git is the canonical cooperation state; MCP is only the typed control adapter.`,
+  "At session start call coop_sync, coop_check_inbox and coop_get_global_state before choosing work.",
+  "Read a task, claim it with expected_version, then call coop_publish_state. Do not start business work unless pushed=true.",
+  "After a mutation, publish immediately. On remote_conflict, stop, reconcile, re-read the task and retry the decision.",
+  "Messages request clarification, review or handoff; they never grant task ownership. Acknowledge actionable messages explicitly.",
+  ].join(" ");
+}
 
 export function createServer(): McpServer {
-  const server = new McpServer({ name: "agent-coop", version: "0.1.0" });
+  const server = new McpServer(
+    { name: "agent-coop", version: "0.2.0" },
+    { instructions: mcpInstructions() },
+  );
 
   server.tool("coop_init", "Initialize cooperation repository and optional git remote.", {
     remote: z.string().optional(),
@@ -143,6 +159,13 @@ export function createServer(): McpServer {
     remote: z.string().optional(),
     branch: z.string().optional(),
   }, async (args) => ({ content: [{ type: "text", text: await coopPublishState(args) }] }));
+
+  server.tool("coop_reconcile", "Inspect a rejected local candidate. With explicit confirmation, discard cooperation-only local commits so canonical state can be re-read safely.", {
+    remote: z.string().optional(),
+    branch: z.string().optional(),
+    discard_local_candidate: z.boolean().optional(),
+    expected_local_revision: z.string().optional(),
+  }, async (args) => ({ content: [{ type: "text", text: await coopReconcile(args) }] }));
 
   server.tool("emit_chat", "Emit key coop events to chat bridge adapter (optional).", {
     topic: z.string(),

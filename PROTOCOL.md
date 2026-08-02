@@ -17,8 +17,11 @@ never an implicit second repository.
 
 ## 2) Local/Remote topology
 
-### Local workspace (per agent)
-Each agent uses a business-code worktree plus a coordination worktree.
+### Local workspace
+Each Agent uses a business-code worktree plus a coordination checkout. Agents
+on one machine may share the coordination checkout because Git mutations are
+serialized repository-wide. Agents on different machines use independent
+checkouts of the same branch.
 
 ### Remote workspace (shared)
 A shared Git remote is used to exchange state across agents/machines.
@@ -37,7 +40,10 @@ This keeps coordination deterministic and auditable.
 
 `coop_sync` never rebases divergent local coordination commits. Divergence
 means a provisional local decision lost the global race and requires explicit
-reconciliation.
+reconciliation. `coop_reconcile` may discard a rejected candidate only after
+verifying its exact revision and proving every changed path belongs to
+canonical cooperation state. Candidates containing business files require
+manual handling.
 
 ## 3) Task lifecycle
 
@@ -47,9 +53,9 @@ Task files are markdown with YAML frontmatter. Minimal status flow:
 
 `blocked` and `cancelled` are allowed terminal/side states.
 
-Use `version` to reject stale local writes. A local task lock serializes writers
-inside one worktree; a fast-forward-only push to the shared coordination branch
-is the cross-machine compare-and-swap boundary.
+Use `version` to reject stale local writes. A repository-wide lock serializes
+all writers and Git commits inside one checkout; a fast-forward-only push to
+the shared coordination branch is the cross-machine compare-and-swap boundary.
 
 A local claim is provisional. It becomes globally accepted only after
 `coop_publish_state` reports `pushed=true`. A rejected push requires a fetch and

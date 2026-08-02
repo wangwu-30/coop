@@ -14,6 +14,8 @@ const HARD_ALLOWED_ACTORS = new Set([
   // Backward-compatible local/test actors
   "openclaw",
   "claude-code",
+  "codex",
+  "cursor",
   "system",
 ]);
 

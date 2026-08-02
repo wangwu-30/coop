@@ -5,7 +5,7 @@ import * as path from 'node:path';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { coopInit } from '../src/tools/init.js';
-import { coopPostTask } from '../src/tools/coop.js';
+import { coopCheckInbox, coopPostTask } from '../src/tools/coop.js';
 import { coopGetGlobalState } from '../src/tools/global-state.js';
 
 let tmpDir: string;
@@ -27,6 +27,7 @@ describe('global state', () => {
   it('uses the Git revision as a global cursor and reports changed tasks', async () => {
     const initial = JSON.parse(await coopGetGlobalState({ fetch: false }));
     expect(initial.canonical_revision).toBeTruthy();
+    expect(initial.revision_relation).toBe('local_only');
 
     await coopPostTask({ title: 'Global cursor', body: 'detect this task', source: 'openclaw' });
     const updated = JSON.parse(await coopGetGlobalState({
@@ -57,9 +58,31 @@ describe('global state', () => {
     process.env.AGENT_COOP_DIR = tmpDir;
     const state = JSON.parse(await coopGetGlobalState());
     expect(state.local_is_current).toBe(false);
+    expect(state.revision_relation).toBe('remote_ahead');
     expect(state.task_counts.open).toBe(1);
     expect(state.local_worktree_task_counts.open).toBe(0);
     expect(state.task_counts_revision).toBe(state.remote_revision);
+
+    await fs.rm(root, { recursive: true, force: true });
+  });
+
+  it('distinguishes a local candidate that needs publish from remote state that needs sync', async () => {
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), 'agent-coop-global-local-ahead-'));
+    const remote = path.join(root, 'remote.git');
+    await exec('git', ['init', '--bare', remote]);
+    await exec('git', ['remote', 'add', 'origin', remote], { cwd: tmpDir });
+    await exec('git', ['push', '-u', 'origin', 'main'], { cwd: tmpDir });
+
+    await coopPostTask({ title: 'Local candidate', body: 'publish me', source: 'codex' });
+    const state = JSON.parse(await coopGetGlobalState({ fetch: false }));
+    expect(state.revision_relation).toBe('local_ahead');
+
+    const inbox = JSON.parse(await coopCheckInbox({ agent_id: 'codex', fetch: false }));
+    expect(inbox.summary).toMatchObject({
+      sync_required: false,
+      publish_required: true,
+      reconciliation_required: false,
+    });
 
     await fs.rm(root, { recursive: true, force: true });
   });

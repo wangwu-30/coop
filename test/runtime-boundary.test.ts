@@ -7,6 +7,7 @@ describe("runtime artifact boundary", () => {
       "src/index.ts",
       ".agent-coop/config.yaml",
       ".agent-coop/cooperation/tasks/task-a.md",
+      "coop-min/state/dispatch.json",
       "next-round.json",
       "examples/next-round.sample.json",
     ];
@@ -14,6 +15,7 @@ describe("runtime artifact boundary", () => {
     expect(detectRuntimeBoundaryViolations(files)).toEqual([
       ".agent-coop/config.yaml",
       ".agent-coop/cooperation/tasks/task-a.md",
+      "coop-min/state/dispatch.json",
       "next-round.json",
     ]);
   });

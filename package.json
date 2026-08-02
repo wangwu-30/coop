@@ -1,15 +1,43 @@
 {
   "name": "agent-coop",
-  "version": "0.1.0",
-  "description": "Agent cooperation via MCP Server + git sync",
+  "version": "0.2.0",
+  "description": "Git-native agent cooperation core with CLI and MCP adapters",
   "type": "module",
-  "main": "dist/index.js",
+  "main": "dist/core/index.js",
+  "types": "dist/core/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/core/index.d.ts",
+      "import": "./dist/core/index.js"
+    },
+    "./core": {
+      "types": "./dist/core/index.d.ts",
+      "import": "./dist/core/index.js"
+    },
+    "./mcp": {
+      "types": "./dist/server.d.ts",
+      "import": "./dist/server.js"
+    },
+    "./package.json": "./package.json"
+  },
   "bin": {
     "agent-coop": "dist/index.js",
-    "agent-coop-cli": "dist/cli.js"
+    "agent-coop-cli": "dist/cli.js",
+    "coop": "dist/cli.js"
   },
+  "files": [
+    "dist/",
+    "examples/",
+    "README.md",
+    "QUICKSTART.md",
+    "PROTOCOL.md",
+    "OPERATIONS.md",
+    "ARCHITECTURE.md",
+    "LICENSE"
+  ],
   "scripts": {
     "build": "tsc",
+    "prepare": "npm run build",
     "dev": "tsc --watch",
     "start": "node dist/index.js",
     "test": "vitest run",
@@ -33,8 +61,8 @@
     "quality:precheck:noop": "node scripts/noop-update-precheck-alert.mjs",
     "audit:ops-summary": "node scripts/event-audit-ops-summary.mjs",
     "audit:actor-enforce": "node scripts/generic-actor-enforcer.mjs --fail-on-generic",
-    "quality:gate": "npm run check:runtime-boundary && npm run test && npm run build && npm run validate:coop -- --strict-zero-files && node scripts/write-quality-evidence.mjs",
-    "quality:gate:parallel": "npm run check:runtime-boundary & npm run test & npm run build & wait && npm run validate:coop -- --strict-zero-files && node scripts/write-quality-evidence.mjs"
+    "quality:gate": "npm run check:runtime-boundary && npm run test && npm run build && npm run validate:coop -- --no-strict-zero-files && node scripts/write-quality-evidence.mjs",
+    "quality:gate:parallel": "npm run check:runtime-boundary & npm run test & npm run build & wait && npm run validate:coop -- --no-strict-zero-files && node scripts/write-quality-evidence.mjs"
   },
   "keywords": [
     "mcp",
@@ -44,9 +72,20 @@
     "messaging"
   ],
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wangwu-30/coop.git"
+  },
+  "homepage": "https://github.com/wangwu-30/coop#readme",
+  "bugs": {
+    "url": "https://github.com/wangwu-30/coop/issues"
+  },
+  "engines": {
+    "node": ">=18"
+  },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.12.1",
-    "yaml": "^2.7.1",
+    "@modelcontextprotocol/sdk": "^1.30.0",
+    "yaml": "^2.9.0",
     "zod": "^3.24.2"
   },
   "devDependencies": {

@@ -24,7 +24,7 @@ export async function coopInit(input: InitInput): Promise<string> {
   }
 
   const config: CoopConfig = configExists ? await loadConfig(coopDir) : {
-    version: "0.1.0",
+    version: "0.2.0",
     agents: ["claude-code", "cursor", "codex", "openclaw"],
     remote: input.remote,
     memoryBridge: {
