@@ -46,7 +46,7 @@ describe('global state', () => {
     const root = await fs.mkdtemp(path.join(os.tmpdir(), 'agent-coop-global-remote-'));
     const remote = path.join(root, 'remote.git');
     const peer = path.join(root, 'peer');
-    await exec('git', ['init', '--bare', remote]);
+    await exec('git', ['init', '--bare', '-b', 'main', remote]);
     await exec('git', ['remote', 'add', 'origin', remote], { cwd: tmpDir });
     await exec('git', ['push', '-u', 'origin', 'main'], { cwd: tmpDir });
     await exec('git', ['clone', remote, peer]);
@@ -69,7 +69,7 @@ describe('global state', () => {
   it('distinguishes a local candidate that needs publish from remote state that needs sync', async () => {
     const root = await fs.mkdtemp(path.join(os.tmpdir(), 'agent-coop-global-local-ahead-'));
     const remote = path.join(root, 'remote.git');
-    await exec('git', ['init', '--bare', remote]);
+    await exec('git', ['init', '--bare', '-b', 'main', remote]);
     await exec('git', ['remote', 'add', 'origin', remote], { cwd: tmpDir });
     await exec('git', ['push', '-u', 'origin', 'main'], { cwd: tmpDir });
 

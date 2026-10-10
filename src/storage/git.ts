@@ -197,7 +197,7 @@ export async function isGitRepo(coopDir?: string): Promise<boolean> {
 }
 
 export async function gitInit(coopDir?: string): Promise<void> {
-  await git(["init"], coopDir);
+  await git(["init", "-b", "main"], coopDir);
 }
 
 export async function gitAddAndCommit(files: string[], message: string, coopDir?: string): Promise<void> {
