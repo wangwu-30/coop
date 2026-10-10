@@ -22,7 +22,7 @@ async function createDivergence() {
   const local = path.join(root, "local");
   const peer = path.join(root, "peer");
   await fs.mkdir(local, { recursive: true });
-  await exec("git", ["init", "--bare", remote]);
+  await exec("git", ["init", "--bare", "-b", "main", remote]);
 
   process.env.AGENT_COOP_DIR = local;
   await coopInit({ remote });
