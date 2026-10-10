@@ -175,3 +175,9 @@ This repo is now centered on the new cooperation kernel in:
 
 Old flywheel-era scripts are not part of the new conceptual model.
 They should be removed or ignored as migration debris, not treated as active architecture.
+
+---
+
+## Related projects
+
+- **[agent-collab-goals](https://github.com/wangwu-30/agent-collab-goals)**: 更早期的基于 GitHub Issue 和 PR 的目标优先协作协议。人类定义目标，Agent 将其分解为任务，贡献者通过 issue 和 pull request 完成任务。该协议强调目标驱动的工作流和 Agent 上下文的交接机制。相比之下，coop 采用 Git 原生的任务文件和消息系统作为真相源，提供更简洁的协调内核。
