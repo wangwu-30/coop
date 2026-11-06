@@ -68,6 +68,15 @@
       "semantic_passed": 4,
       "complete_passed": 4,
       "cases": 4
+    },
+    {
+      "label": "holdout-final",
+      "run": "rdae62296291639c8",
+      "outputs": "rsi/history/holdout-final/outputs.json",
+      "hard_passed": 4,
+      "semantic_passed": 4,
+      "complete_passed": 4,
+      "cases": 4
     }
   ]
 }

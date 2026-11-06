@@ -1,0 +1,4 @@
+{
+  "candidate": "Read the case; apply the shared contract.\nDo not modify repository files, create commits, or run git push.\nDo not read credentials, unrelated projects, or personal conversation history.\nWhen the workflow requests a runtime result file outside the repository,\nwrite only that designated result file using the required output schema.",
+  "taskpack": "rsi/eval/holdout/tasks.json"
+}

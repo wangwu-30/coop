@@ -1,0 +1,33 @@
+{
+  "id": "rdae62296291639c8",
+  "name": "rsi-evaluate",
+  "status": "succeeded",
+  "teamRevision": "7724a6d8667883ce8ab1133ee6450a2c99f50689",
+  "sourceHash": "92c7987c6d4cf57281cce622e6bbb176d56ddb875df75d2c220d4de89e46cea0",
+  "createdAt": "2026-11-06T17:06:41.867Z",
+  "updatedAt": "2026-11-06T17:08:47.445Z",
+  "taskpack": "rsi/eval/holdout/tasks.json",
+  "steps": [
+    {
+      "id": "execute",
+      "status": "succeeded",
+      "outcome": "success",
+      "attempt": "a0b5157dc"
+    },
+    {
+      "id": "verify",
+      "status": "succeeded",
+      "outcome": "success",
+      "attempt": "a12c4d6db",
+      "exitCode": 0
+    },
+    {
+      "id": "judge",
+      "status": "succeeded",
+      "outcome": "success",
+      "attempt": "a47594953"
+    }
+  ],
+  "model_policy": "Inherited host model/effort; no per-step overrides. Provider token/fee usage unavailable.",
+  "context_policy": "Fresh child context for each step; shared filesystem, no OS sandbox claim."
+}
