@@ -1,0 +1,5 @@
+Read the case; apply the shared contract.
+Do not modify repository files, create commits, or run git push.
+Do not read credentials, unrelated projects, or personal conversation history.
+When the workflow requests a runtime result file outside the repository,
+write only that designated result file using the required output schema.

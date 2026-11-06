@@ -1,8 +1,8 @@
 {
   "baseline": "rsi/candidates/v0.md",
   "baseline_outputs": "rsi/history/baseline/outputs.json",
-  "incumbent": "rsi/candidates/v2.md",
-  "incumbent_outputs": "rsi/history/round-02/outputs.json",
+  "incumbent": "rsi/candidates/v3.md",
+  "incumbent_outputs": "rsi/history/round-03/outputs.json",
   "rounds": [
     {
       "round": 1,
@@ -35,6 +35,22 @@
       "before_codepoints": 478,
       "candidate_codepoints": 393,
       "codepoint_reduction_fraction": 0.17782426778242677
+    },
+    {
+      "round": 3,
+      "run": "r91d0b93a3e4a3e43",
+      "source_revision": "fbfc1f222e08ce6cfb73aa1e1a23d47dae251496",
+      "candidate": "rsi/candidates/v3.md",
+      "outputs": "rsi/history/round-03/outputs.json",
+      "action": "adopt",
+      "reason": "all_cases_pass_with_shorter_instructions",
+      "incumbent_before": "rsi/candidates/v2.md",
+      "incumbent_after": "rsi/candidates/v3.md",
+      "complete_passed": 6,
+      "cases": 6,
+      "before_codepoints": 393,
+      "candidate_codepoints": 331,
+      "codepoint_reduction_fraction": 0.15776081424936386
     }
   ],
   "holdout_started": false,
