@@ -1,0 +1,4 @@
+interface:
+  display_name: "RSI Cycle"
+  short_description: "Run bounded Agent revisions with frozen evaluation"
+  default_prompt: "Use $rsi-cycle to run three bounded reviewer improvement rounds and preserve all decisions in GitHub."

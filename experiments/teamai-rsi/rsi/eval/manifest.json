@@ -1,0 +1,14 @@
+{
+  "suite_version": "rsi-review-suite-v1",
+  "files": {
+    "README.md": "69f982cfc4f885a22f624aea0b3d25d00420248672df9c9554aa3a67bf7e78f6",
+    "protocol.json": "5283764c490f78a8d90a047c039a32aea2c4831e952bf82f7bc96b77629699d0",
+    "response.schema.json": "4489bbe27d35ef22463683f99476cc1d74169568418fae1d0376e27791600df1",
+    "semantic-rubric.md": "7ef226a50f3494acf9e7d3acfba533beaea115381d7207635cb39dbf7f59758f",
+    "score.py": "bb38a9c5b05d6f5e493fbb63dfeb3f3bfd92b5b717bd48b81ed30c76d84ebc56",
+    "dev/tasks.json": "73af2e1e7bf7fae055b2f7264bdd888ea1b1aa7b88c28042553ee2002033abe7",
+    "dev/oracle.json": "78ae9d9274890a6bbe29ed8ad431349047b6e1cf90e44eeb625f5dcc846556b1",
+    "holdout/tasks.json": "60d8624343c1b7d7adc00624e463485c1d5ef58e693a5f016c57b2a0222be47f",
+    "holdout/oracle.json": "51581cea0be78e86900380298274cd5269aafd39f9c72b3c9ecf17d6341ccce0"
+  }
+}

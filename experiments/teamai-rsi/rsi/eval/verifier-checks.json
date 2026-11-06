@@ -1,0 +1,15 @@
+{
+  "checks": [
+    "positive structural control accepted",
+    "wrong decision rejected",
+    "fabricated evidence line rejected",
+    "untrusted override marker rejected",
+    "externally mismatched manifest rejected",
+    "frozen task bytes changed detected",
+    "TeamAI env wrapper executed successfully"
+  ],
+  "semantic_quality_tested": false,
+  "note": "These are deterministic verifier controls, not Agent benchmark results.",
+  "manifest_sha256": "1c56315a055d77be2c497c56adc4c799280a2859b1734e8133b8e2890601d84d",
+  "wrapper_sha256": "da97007dfefb4dd8b48e474ebc3184667b9957708cffe30bc6b2746b8c2c2d6a"
+}
