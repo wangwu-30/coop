@@ -1,0 +1,35 @@
+diff --git a/.teamai/workflows/rsi-evaluate.yaml b/.teamai/workflows/rsi-evaluate.yaml
+index 2e6f808..8f7848d 100644
+--- a/.teamai/workflows/rsi-evaluate.yaml
++++ b/.teamai/workflows/rsi-evaluate.yaml
+@@ -34,7 +34,7 @@ steps:
+     needs: [execute]
+     timeout: 30s
+     workspace: read-only
+-    command: python3 rsi/verify.py
++    command: python3 -B rsi/verify.py
+     env:
+       RSI_TASKPACK: "{{ inputs.taskpack }}"
+       RSI_RESPONSES_JSON: "{{ steps.execute.outputs.responses }}"
+diff --git a/.teamai/workflows/rsi-round.yaml b/.teamai/workflows/rsi-round.yaml
+index 2506709..5e12d25 100644
+--- a/.teamai/workflows/rsi-round.yaml
++++ b/.teamai/workflows/rsi-round.yaml
+@@ -67,7 +67,7 @@ steps:
+     needs: [execute]
+     timeout: 30s
+     workspace: read-only
+-    command: python3 rsi/verify.py
++    command: python3 -B rsi/verify.py
+     env:
+       RSI_TASKPACK: "{{ inputs.taskpack }}"
+       RSI_RESPONSES_JSON: "{{ steps.execute.outputs.responses }}"
+@@ -106,7 +106,7 @@ steps:
+     needs: [judge]
+     timeout: 30s
+     workspace: read-only
+-    command: python3 rsi/decide.py
++    command: python3 -B rsi/decide.py
+     env:
+       RSI_ROUND: "{{ inputs.round }}"
+       RSI_INCUMBENT_INSTRUCTIONS: "{{ inputs.incumbent }}"

@@ -1,0 +1,29 @@
+{
+  "run": "rcd8334965689c92d",
+  "status": "done",
+  "actions": [
+    {
+      "kind": "done",
+      "outcome": "failed",
+      "prs": []
+    }
+  ],
+  "running": [],
+  "events": [
+    {
+      "kind": "restarted",
+      "step": "verify",
+      "attempt": "a56914570"
+    },
+    {
+      "kind": "settled",
+      "step": "verify",
+      "outcome": "failed",
+      "exitCode": 0,
+      "failure": {
+        "code": "read_only_dirty",
+        "message": "Read-only command step changed repository paths: rsi/eval/__pycache__/score.cpython-312.pyc"
+      }
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "id": "rcd8334965689c92d",
+  "name": "rsi-evaluate",
+  "status": "failed",
+  "teamRevision": "2a3d6b25b469d080d48c3fe2e33e5c8e95f7897b",
+  "createdAt": "2026-11-06T16:21:52.768Z",
+  "updatedAt": "2026-11-06T16:24:14.601Z",
+  "steps": [
+    {
+      "id": "execute",
+      "status": "succeeded",
+      "outcome": "success",
+      "attempt": "a66265b8b"
+    },
+    {
+      "id": "verify",
+      "status": "failed",
+      "outcome": "failed",
+      "attempt": "a56914570",
+      "exitCode": 0,
+      "message": "Read-only command step changed repository paths: rsi/eval/__pycache__/score.cpython-312.pyc",
+      "failure": {
+        "code": "read_only_dirty",
+        "message": "Read-only command step changed repository paths: rsi/eval/__pycache__/score.cpython-312.pyc"
+      }
+    },
+    {
+      "id": "judge",
+      "status": "skipped"
+    }
+  ],
+  "sanitization": "Runtime installation identifiers and machine metadata omitted; execution and failure evidence preserved."
+}
