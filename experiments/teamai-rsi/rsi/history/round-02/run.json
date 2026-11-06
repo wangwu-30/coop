@@ -1,0 +1,46 @@
+{
+  "id": "r6db09c02ff7cdd08",
+  "name": "rsi-round",
+  "status": "succeeded",
+  "teamRevision": "7f0e28e14b63968ba336b3891519a4114a8e3a98",
+  "sourceHash": "ca9522f4e2062c25411684c8d639ba3f7c4e604c02eaeeff11d63a2bc45f60a6",
+  "createdAt": "2026-11-06T16:52:33.725Z",
+  "updatedAt": "2026-11-06T16:57:29.359Z",
+  "taskpack": "rsi/eval/dev/tasks.json",
+  "steps": [
+    {
+      "id": "propose",
+      "status": "succeeded",
+      "outcome": "success",
+      "attempt": "a430eb8f3"
+    },
+    {
+      "id": "execute",
+      "status": "succeeded",
+      "outcome": "success",
+      "attempt": "af8690459"
+    },
+    {
+      "id": "verify",
+      "status": "succeeded",
+      "outcome": "success",
+      "attempt": "a7464b2cc",
+      "exitCode": 0
+    },
+    {
+      "id": "judge",
+      "status": "succeeded",
+      "outcome": "success",
+      "attempt": "ad45fae33"
+    },
+    {
+      "id": "decide",
+      "status": "succeeded",
+      "outcome": "success",
+      "attempt": "a7b19525e",
+      "exitCode": 0
+    }
+  ],
+  "model_policy": "Inherited host model/effort; no per-step overrides. Provider token/fee usage unavailable.",
+  "context_policy": "Fresh child context for each step; shared filesystem, no OS sandbox claim."
+}

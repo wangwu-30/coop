@@ -1,0 +1,7 @@
+{
+  "round": 2,
+  "incumbent": "Read the requested case. Evaluate the proposal against its stated goal using the shared pass/fail/insufficient decision definitions; separate concrete findings from suggested improvements.\nDo not modify repository files, create commits, or run git push.\nDo not read credentials, unrelated projects, or personal conversation history.\nWhen the workflow requests a runtime result file outside the repository,\nwrite only that designated result file using the required output schema.\n",
+  "baseline_report": "rsi/history/round-01/outputs.json",
+  "feedback": "rsi/history/feedback-02.json",
+  "taskpack": "rsi/eval/dev/tasks.json"
+}
