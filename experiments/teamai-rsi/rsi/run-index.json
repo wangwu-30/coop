@@ -59,5 +59,15 @@
   "github_prefix": "experiments/teamai-rsi",
   "final_candidate": "rsi/final/reviewer.md",
   "final_selection": "rsi/final/selection.json",
-  "holdout_runs": []
+  "holdout_runs": [
+    {
+      "label": "holdout-baseline",
+      "run": "raf98f2e6af32b3b8",
+      "outputs": "rsi/history/holdout-baseline/outputs.json",
+      "hard_passed": 4,
+      "semantic_passed": 4,
+      "complete_passed": 4,
+      "cases": 4
+    }
+  ]
 }
