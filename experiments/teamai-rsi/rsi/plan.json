@@ -1,0 +1,17 @@
+{
+  "task": "Build and execute a bounded TeamAI RSI cycle, then preserve evolution and final artifacts on GitHub",
+  "date_local": "2026-11-07",
+  "timezone": "Asia/Shanghai",
+  "target": "Reviewer instructions; common protocol/model/taskpack/evaluator/budget stay fixed",
+  "round_budget": 3,
+  "baseline_adaptation": "Existing reviewer instructions with the same three-value decision contract used for all candidates; no baseline-only handicap",
+  "manifest_sha256": "1c56315a055d77be2c497c56adc4c799280a2859b1734e8133b8e2890601d84d",
+  "verification_wrapper_sha256": "da97007dfefb4dd8b48e474ebc3184667b9957708cffe30bc6b2746b8c2c2d6a",
+  "decision_program_sha256": "b6d8f2f82a03420ec51a2e26d9c910f86f04226090d7a255d43380ace6390867",
+  "model": "Host inherited model and reasoning settings; no per-step overrides",
+  "semantics": "Independent child judge per evaluation; model-judged results are not human ground truth",
+  "acceptance": "Per protocol: at least one more complete case with no regressions; or all cases complete in both and >=15% fewer trimmed Unicode codepoints",
+  "holdout": "One final paired evaluation stage after final candidate selection; no tuning afterward",
+  "cost": "Record wall time and attempts; token and billing data unavailable unless tool reports them",
+  "github": "Required deliverable, all rounds and final assets; destination being resolved via authenticated connector"
+}

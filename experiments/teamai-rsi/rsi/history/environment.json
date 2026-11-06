@@ -1,0 +1,42 @@
+{
+  "schema_version": "rsi-environment-v1",
+  "observed_versions": {
+    "teamai_cli": "0.29.0",
+    "python": "3.12.14",
+    "git": "2.51.1",
+    "node": "24.22.1",
+    "codex_cli_installed_only": "0.167.0"
+  },
+  "teamai_package": {
+    "name": "teamai-cli",
+    "version": "0.29.0",
+    "bin": {
+      "teamai": "dist/index.js"
+    },
+    "repository": "https://github.com/Tencent/teamai-cli",
+    "bundled_install_doc_node_requirement": ">=20",
+    "version_evidence": "Installed package.json and read-only --version commands"
+  },
+  "execution": {
+    "driver": "skill",
+    "host": "Current conversation host with collaboration child capability",
+    "child_context": "Fresh for each proposal, execution, and semantic judgment; explicit deployed role and attempt brief loading",
+    "model_policy": "Inherited host model and reasoning settings, no per-step override",
+    "exact_provider_model_version": null,
+    "token_usage": null,
+    "billed_fees": null,
+    "codex_cli_inference_used": false
+  },
+  "verified_reuse_commands": {
+    "method": "Read-only init/pull/workflow start help and bundled setup/workflow documentation; no fresh-machine rerun",
+    "initialization": "teamai init . --provider git --scope workspace --agent codex --no-inherit-user-scope",
+    "resource_deployment": "teamai pull",
+    "workflow_guide": "teamai skill get workflow",
+    "working_directory": "Independent Git worktree root containing .teamai and rsi, with an authorized origin"
+  },
+  "runtime_observations": [
+    "After a verify timeout, retrying only that step in a persistent terminal succeeded. Environment lifecycle is a possible cause; the root cause was not independently isolated.",
+    "Workflow Python commands use -B to avoid bytecode cache writes in read-only checkout."
+  ],
+  "original_initialization_command": "Not recoverable with confidence from available logs; reuse command is not presented as the original invocation."
+}

@@ -1,0 +1,160 @@
+{
+  "schema_version": "rsi-publication-provenance-v1",
+  "repository": "wangwu-30/coop",
+  "branch": "teamai-rsi-20261107",
+  "path_prefix": "experiments/teamai-rsi",
+  "audited_local_revision": "69df09f8389c18f440ea9c575d6c3d42ba061ace",
+  "publication_kind": "Content-selected export with its own Git history; local source revisions are not objects in the destination repository.",
+  "scope": "New generic RSI agents, workflows, project skill, synthetic evaluations, candidate versions, structured execution evidence, and final reports. Runtime installation identifiers and machine configuration are excluded.",
+  "history_policy": "Each stage was committed separately and appended with expected_sha and force=false. Original local history was not rewritten.",
+  "stages": [
+    {
+      "stage": "bootstrap",
+      "sha": "aba68882a2662aaac06f212f1f6a9da0327ef3b0",
+      "local_sha": "4b845fa3b449b7423a6cc87e1bef85814f3cfb68",
+      "url": "https://github.com/wangwu-30/coop/commit/aba68882a2662aaac06f212f1f6a9da0327ef3b0"
+    },
+    {
+      "stage": "baseline",
+      "sha": "e77811629b588b832d7ab687ffda363dc9bf44ad",
+      "local_sha": "babbb598ab3a0e2457e288ede4ff5b046faff023",
+      "url": "https://github.com/wangwu-30/coop/commit/e77811629b588b832d7ab687ffda363dc9bf44ad"
+    },
+    {
+      "stage": "round-01",
+      "sha": "57b44a9c9e6290db2d35de8f6b725c08d39278e4",
+      "local_sha": "7f0e28e14b63968ba336b3891519a4114a8e3a98",
+      "url": "https://github.com/wangwu-30/coop/commit/57b44a9c9e6290db2d35de8f6b725c08d39278e4"
+    },
+    {
+      "stage": "baseline-failure-evidence",
+      "sha": "8e30b2d8f38571ccf01ab887847e31f7c7571134",
+      "local_sha": "4b845fa3b449b7423a6cc87e1bef85814f3cfb68",
+      "url": "https://github.com/wangwu-30/coop/commit/8e30b2d8f38571ccf01ab887847e31f7c7571134"
+    },
+    {
+      "stage": "round-02",
+      "sha": "b9da7f2fa2ca6dd484a23cd931332c4a9299a711",
+      "local_sha": "fbfc1f222e08ce6cfb73aa1e1a23d47dae251496",
+      "url": "https://github.com/wangwu-30/coop/commit/b9da7f2fa2ca6dd484a23cd931332c4a9299a711"
+    },
+    {
+      "stage": "round-03",
+      "sha": "0ee9b98218a629ecb401e7f30abbc49dca2b1967",
+      "local_sha": "967d9063842281cc689ee14d45dc73f60748bc21",
+      "url": "https://github.com/wangwu-30/coop/commit/0ee9b98218a629ecb401e7f30abbc49dca2b1967"
+    },
+    {
+      "stage": "final-freeze",
+      "sha": "7552d13c9d68591dc07948fc225edf810c0c8de8",
+      "local_sha": "0f30657f0009febc8ea77e096733087a3193a71b",
+      "url": "https://github.com/wangwu-30/coop/commit/7552d13c9d68591dc07948fc225edf810c0c8de8"
+    },
+    {
+      "stage": "holdout-baseline",
+      "sha": "00435486d95232e6203cd9d12217a21011960b23",
+      "local_sha": "7724a6d8667883ce8ab1133ee6450a2c99f50689",
+      "url": "https://github.com/wangwu-30/coop/commit/00435486d95232e6203cd9d12217a21011960b23"
+    },
+    {
+      "stage": "holdout-final",
+      "sha": "1a68e65d43651ddba461cde9db0cc556cd3f5de4",
+      "local_sha": "2ee77fed042690ac76cbc6b853f26cb129a93b52",
+      "url": "https://github.com/wangwu-30/coop/commit/1a68e65d43651ddba461cde9db0cc556cd3f5de4"
+    },
+    {
+      "stage": "results",
+      "sha": "c3458d5806a76ea7bf89898e61f5ea27093c0f9c",
+      "local_sha": "69df09f8389c18f440ea9c575d6c3d42ba061ace",
+      "url": "https://github.com/wangwu-30/coop/commit/c3458d5806a76ea7bf89898e61f5ea27093c0f9c"
+    }
+  ],
+  "evaluation_source_snapshots": [
+    {
+      "stage": "baseline",
+      "run_id": "rdb1509ed0234a9b8",
+      "local_source_revision": "4b845fa3b449b7423a6cc87e1bef85814f3cfb68",
+      "github_source_snapshot": "aba68882a2662aaac06f212f1f6a9da0327ef3b0",
+      "github_archive_commit": "e77811629b588b832d7ab687ffda363dc9bf44ad",
+      "instruction_path": "rsi/candidates/v0.md",
+      "instruction_sha256_utf8_exact": "d0999ce78482f532c65f34dcc0463792a258c32783f741910c0f8581d246c858",
+      "outputs_path": "rsi/history/baseline/outputs.json",
+      "outputs_sha256": "55ead3a28e673df6be63699b03dbe70f0fe8b713efe0f4bea5e5e18cd3c1784d"
+    },
+    {
+      "stage": "round-01",
+      "run_id": "ra66a9bf598590a61",
+      "local_source_revision": "babbb598ab3a0e2457e288ede4ff5b046faff023",
+      "github_source_snapshot": "e77811629b588b832d7ab687ffda363dc9bf44ad",
+      "github_archive_commit": "57b44a9c9e6290db2d35de8f6b725c08d39278e4",
+      "instruction_path": "rsi/candidates/v1.md",
+      "instruction_sha256_utf8_exact": "90531104083796356cea1d4714305dfc0c9fa84c9ded45cf66917265207b83eb",
+      "outputs_path": "rsi/history/round-01/outputs.json",
+      "outputs_sha256": "9920b687aca85fdc76d20b711842ca8494d23cb17c1c34f5e63e28d213bb7126"
+    },
+    {
+      "stage": "round-02",
+      "run_id": "r6db09c02ff7cdd08",
+      "local_source_revision": "7f0e28e14b63968ba336b3891519a4114a8e3a98",
+      "github_source_snapshot": "57b44a9c9e6290db2d35de8f6b725c08d39278e4",
+      "github_archive_commit": "b9da7f2fa2ca6dd484a23cd931332c4a9299a711",
+      "instruction_path": "rsi/candidates/v2.md",
+      "instruction_sha256_utf8_exact": "720c36e05ddd4dadf5016930516056b7be3e8fedb51b112199e30e352d2dcefa",
+      "outputs_path": "rsi/history/round-02/outputs.json",
+      "outputs_sha256": "df0bdb1e2ca43c2be0525b8db361d5cc5e68b744e3e82b9ecbb9f8ce64a11208"
+    },
+    {
+      "stage": "round-03",
+      "run_id": "r91d0b93a3e4a3e43",
+      "local_source_revision": "fbfc1f222e08ce6cfb73aa1e1a23d47dae251496",
+      "github_source_snapshot": "b9da7f2fa2ca6dd484a23cd931332c4a9299a711",
+      "github_archive_commit": "0ee9b98218a629ecb401e7f30abbc49dca2b1967",
+      "instruction_path": "rsi/candidates/v3.md",
+      "instruction_sha256_utf8_exact": "bc037d8767eaaf15db790610b5b54f5dfb346dabbf97e21836e0b3824ceb5837",
+      "outputs_path": "rsi/history/round-03/outputs.json",
+      "outputs_sha256": "a6c3ef75c8c0e47f452ba92ed8a0dde016fa780df5fc0541501f9b4982129759"
+    },
+    {
+      "stage": "holdout-baseline",
+      "run_id": "raf98f2e6af32b3b8",
+      "local_source_revision": "0f30657f0009febc8ea77e096733087a3193a71b",
+      "github_source_snapshot": "7552d13c9d68591dc07948fc225edf810c0c8de8",
+      "github_archive_commit": "00435486d95232e6203cd9d12217a21011960b23",
+      "instruction_path": "rsi/candidates/v0.md",
+      "instruction_sha256_utf8_exact": "d0999ce78482f532c65f34dcc0463792a258c32783f741910c0f8581d246c858",
+      "outputs_path": "rsi/history/holdout-baseline/outputs.json",
+      "outputs_sha256": "5d7400c609e6aac9eaee380fbc6664beb17b414156dcfe2a1dff4a70a334e37c"
+    },
+    {
+      "stage": "holdout-final",
+      "run_id": "rdae62296291639c8",
+      "local_source_revision": "7724a6d8667883ce8ab1133ee6450a2c99f50689",
+      "github_source_snapshot": "00435486d95232e6203cd9d12217a21011960b23",
+      "github_archive_commit": "1a68e65d43651ddba461cde9db0cc556cd3f5de4",
+      "instruction_path": "rsi/final/reviewer.md",
+      "instruction_sha256_utf8_exact": "bc037d8767eaaf15db790610b5b54f5dfb346dabbf97e21836e0b3824ceb5837",
+      "outputs_path": "rsi/history/holdout-final/outputs.json",
+      "outputs_sha256": "9c10f151344ecd1b745bd6974bc7cddcaec5d0cd1e15537a762b5f28f731a6ec"
+    }
+  ],
+  "initial_failure": {
+    "run_id": "rcd8334965689c92d",
+    "local_source_revision": "2a3d6b25b469d080d48c3fe2e33e5c8e95f7897b",
+    "evidence_commit": "8e30b2d8f38571ccf01ab887847e31f7c7571134",
+    "workflow_reconstruction": "The bootstrap contains the corrected common workflow. Reverse rsi/history/infrastructure/baseline-01/fix-python-cache.patch to recover the initial workflow commands; frozen evaluation assets did not change.",
+    "execution_evidence": "rsi/history/infrastructure/baseline-01"
+  },
+  "post_execution_check": {
+    "bindings": "rsi/history/instruction-bindings.json",
+    "exact_instruction_and_incumbent_report_chain": "passed",
+    "fixed_manifest_wrapper_and_decision_hashes": "passed",
+    "holdouts_started_after_freeze": "passed",
+    "note": "The delivery audit distinguishes exact UTF-8 instruction SHA256 (used by decide.py) from stripped Unicode codepoint length. It does not modify or rerun the frozen evaluation."
+  },
+  "notes": [
+    "GitHub source snapshots represent the published module files only; they do not assert reproduction of omitted host configuration.",
+    "Per-run outputs are the actual archived responses and judgments, not a new execution of the public export.",
+    "The README initialization commands were checked against installed 0.29.0 help and bundled official documentation; a clean-machine end-to-end replay was not performed.",
+    "This provenance file lists preceding publication stages. Its own containing Git commit can be obtained from repository history."
+  ]
+}
