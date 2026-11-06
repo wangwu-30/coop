@@ -53,8 +53,11 @@
       "codepoint_reduction_fraction": 0.15776081424936386
     }
   ],
-  "holdout_started": false,
+  "holdout_started": true,
   "github_repository": "wangwu-30/coop",
   "github_branch": "teamai-rsi-20261107",
-  "github_prefix": "experiments/teamai-rsi"
+  "github_prefix": "experiments/teamai-rsi",
+  "final_candidate": "rsi/final/reviewer.md",
+  "final_selection": "rsi/final/selection.json",
+  "holdout_runs": []
 }

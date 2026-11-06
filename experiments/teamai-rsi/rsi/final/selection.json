@@ -1,0 +1,17 @@
+{
+  "selected_candidate": "rsi/candidates/v3.md",
+  "selected_development_outputs": "rsi/history/round-03/outputs.json",
+  "final_instructions": "rsi/final/reviewer.md",
+  "sha256": "bc037d8767eaaf15db790610b5b54f5dfb346dabbf97e21836e0b3824ceb5837",
+  "trimmed_unicode_codepoints": 331,
+  "baseline_candidate": "rsi/candidates/v0.md",
+  "baseline_sha256": "d0999ce78482f532c65f34dcc0463792a258c32783f741910c0f8581d246c858",
+  "baseline_codepoints": 580,
+  "selection_rule": "Frozen protocol and rsi/decide.py; only development results were used for selection.",
+  "development_complete_passed": 6,
+  "development_cases": 6,
+  "frozen_at": "2026-11-06T17:03:10.002614+00:00",
+  "frozen_before_holdout": true,
+  "holdout_policy": "One paired final evaluation stage; no candidate tuning or score-driven reruns afterward.",
+  "versions_identical": false
+}
