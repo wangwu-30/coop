@@ -1,0 +1,276 @@
+{
+  "cli_version": "0.29.0",
+  "model_policy": "Same inherited host default model and effort; no per-step overrides. Exact provider model version, token counts, and billed fees are unavailable.",
+  "timing_interpretation": "Observed workflow elapsed time includes driver waiting, coordination and retries; not a model-performance or monetary-cost benchmark.",
+  "runs": [
+    {
+      "label": "首次基线（基础设施失败）",
+      "run": "rcd8334965689c92d",
+      "status": "failed",
+      "createdAt": "2026-11-06T16:21:52.768Z",
+      "updatedAt": "2026-11-06T16:24:14.601Z",
+      "wall_seconds_including_driver_waits_and_retries": 141.833,
+      "attempt_count": 2,
+      "attempts": [
+        {
+          "step": "execute",
+          "attempt": "a66265b8b",
+          "outcome": "success",
+          "settledAt": 2
+        },
+        {
+          "step": "verify",
+          "attempt": "a56914570",
+          "outcome": "failed",
+          "failure": {
+            "code": "read_only_dirty",
+            "message": "Read-only command step changed repository paths: rsi/eval/__pycache__/score.cpython-312.pyc"
+          },
+          "exitCode": 0,
+          "settledAt": 3
+        }
+      ]
+    },
+    {
+      "label": "基线开发集",
+      "run": "rdb1509ed0234a9b8",
+      "status": "succeeded",
+      "createdAt": "2026-11-06T16:27:12.791Z",
+      "updatedAt": "2026-11-06T16:36:19.268Z",
+      "wall_seconds_including_driver_waits_and_retries": 546.477,
+      "attempt_count": 4,
+      "attempts": [
+        {
+          "step": "execute",
+          "attempt": "a60d485ce",
+          "outcome": "success",
+          "settledAt": 2
+        },
+        {
+          "step": "verify",
+          "pass": 1,
+          "attempt": "a81b8a089",
+          "outcome": "timeout",
+          "failure": {
+            "code": "timeout",
+            "message": "Step \"verify\" passed its timeout at 2026-11-06T16:30:10.247Z"
+          }
+        },
+        {
+          "step": "verify",
+          "pass": 2,
+          "attempt": "a70a4d043",
+          "outcome": "success",
+          "exitCode": 0,
+          "settledAt": 4
+        },
+        {
+          "step": "judge",
+          "attempt": "a361c48c7",
+          "outcome": "success",
+          "settledAt": 5
+        }
+      ]
+    },
+    {
+      "label": "第1轮",
+      "run": "ra66a9bf598590a61",
+      "status": "succeeded",
+      "createdAt": "2026-11-06T16:39:06.451Z",
+      "updatedAt": "2026-11-06T16:51:37.347Z",
+      "wall_seconds_including_driver_waits_and_retries": 750.896,
+      "attempt_count": 6,
+      "attempts": [
+        {
+          "step": "propose",
+          "attempt": "ab8c9c2e4",
+          "outcome": "success",
+          "settledAt": 2
+        },
+        {
+          "step": "execute",
+          "attempt": "a8ffc9d82",
+          "outcome": "success",
+          "settledAt": 3
+        },
+        {
+          "step": "verify",
+          "attempt": "a80135156",
+          "outcome": "success",
+          "exitCode": 0,
+          "settledAt": 4
+        },
+        {
+          "step": "judge",
+          "pass": 1,
+          "attempt": "a152c156e",
+          "outcome": "timeout",
+          "failure": {
+            "code": "timeout",
+            "message": "Step \"judge\" passed its timeout at 2026-11-06T16:47:33.963Z"
+          }
+        },
+        {
+          "step": "judge",
+          "pass": 2,
+          "attempt": "a0bfb3c98",
+          "outcome": "success",
+          "settledAt": 6
+        },
+        {
+          "step": "decide",
+          "attempt": "aa93ca053",
+          "outcome": "success",
+          "exitCode": 0,
+          "settledAt": 7
+        }
+      ]
+    },
+    {
+      "label": "第2轮",
+      "run": "r6db09c02ff7cdd08",
+      "status": "succeeded",
+      "createdAt": "2026-11-06T16:52:33.725Z",
+      "updatedAt": "2026-11-06T16:57:29.359Z",
+      "wall_seconds_including_driver_waits_and_retries": 295.634,
+      "attempt_count": 5,
+      "attempts": [
+        {
+          "step": "propose",
+          "attempt": "a430eb8f3",
+          "outcome": "success",
+          "settledAt": 2
+        },
+        {
+          "step": "execute",
+          "attempt": "af8690459",
+          "outcome": "success",
+          "settledAt": 3
+        },
+        {
+          "step": "verify",
+          "attempt": "a7464b2cc",
+          "outcome": "success",
+          "exitCode": 0,
+          "settledAt": 4
+        },
+        {
+          "step": "judge",
+          "attempt": "ad45fae33",
+          "outcome": "success",
+          "settledAt": 5
+        },
+        {
+          "step": "decide",
+          "attempt": "a7b19525e",
+          "outcome": "success",
+          "exitCode": 0,
+          "settledAt": 6
+        }
+      ]
+    },
+    {
+      "label": "第3轮",
+      "run": "r91d0b93a3e4a3e43",
+      "status": "succeeded",
+      "createdAt": "2026-11-06T16:58:03.453Z",
+      "updatedAt": "2026-11-06T17:02:41.049Z",
+      "wall_seconds_including_driver_waits_and_retries": 277.596,
+      "attempt_count": 5,
+      "attempts": [
+        {
+          "step": "propose",
+          "attempt": "a3f8e8170",
+          "outcome": "success",
+          "settledAt": 2
+        },
+        {
+          "step": "execute",
+          "attempt": "a54b26e80",
+          "outcome": "success",
+          "settledAt": 3
+        },
+        {
+          "step": "verify",
+          "attempt": "a5abb3343",
+          "outcome": "success",
+          "exitCode": 0,
+          "settledAt": 4
+        },
+        {
+          "step": "judge",
+          "attempt": "a35241f66",
+          "outcome": "success",
+          "settledAt": 5
+        },
+        {
+          "step": "decide",
+          "attempt": "abe897742",
+          "outcome": "success",
+          "exitCode": 0,
+          "settledAt": 6
+        }
+      ]
+    },
+    {
+      "label": "holdout-baseline",
+      "run": "raf98f2e6af32b3b8",
+      "status": "succeeded",
+      "createdAt": "2026-11-06T17:03:39.696Z",
+      "updatedAt": "2026-11-06T17:06:04.283Z",
+      "wall_seconds_including_driver_waits_and_retries": 144.587,
+      "attempt_count": 3,
+      "attempts": [
+        {
+          "step": "execute",
+          "attempt": "a46e1dba1",
+          "outcome": "success",
+          "settledAt": 2
+        },
+        {
+          "step": "verify",
+          "attempt": "aa5306312",
+          "outcome": "success",
+          "exitCode": 0,
+          "settledAt": 3
+        },
+        {
+          "step": "judge",
+          "attempt": "a275db2b9",
+          "outcome": "success",
+          "settledAt": 4
+        }
+      ]
+    },
+    {
+      "label": "holdout-final",
+      "run": "rdae62296291639c8",
+      "status": "succeeded",
+      "createdAt": "2026-11-06T17:06:41.867Z",
+      "updatedAt": "2026-11-06T17:08:47.445Z",
+      "wall_seconds_including_driver_waits_and_retries": 125.578,
+      "attempt_count": 3,
+      "attempts": [
+        {
+          "step": "execute",
+          "attempt": "a0b5157dc",
+          "outcome": "success",
+          "settledAt": 2
+        },
+        {
+          "step": "verify",
+          "attempt": "a12c4d6db",
+          "outcome": "success",
+          "exitCode": 0,
+          "settledAt": 3
+        },
+        {
+          "step": "judge",
+          "attempt": "a47594953",
+          "outcome": "success",
+          "settledAt": 4
+        }
+      ]
+    }
+  ]
+}

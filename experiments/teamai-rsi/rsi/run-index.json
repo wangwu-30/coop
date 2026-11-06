@@ -78,5 +78,8 @@
       "complete_passed": 4,
       "cases": 4
     }
-  ]
+  ],
+  "completed": true,
+  "results": "rsi/RESULTS.md",
+  "execution_summary": "rsi/history/execution-summary.json"
 }
