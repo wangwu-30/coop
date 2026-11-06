@@ -13,5 +13,20 @@
     "outcome": "timeout",
     "evidence": "No place or command result file was created; only lease job metadata existed.",
     "recovery": "Retried verify once using the same run and fixed definition in one persistent terminal; verify completed, then semantic judge completed. Environment-lifecycle diagnosis is supported by this recovery, not a general product defect claim."
+  },
+  {
+    "run": "ra66a9bf598590a61",
+    "attempt": "a152c156e",
+    "stage": "judge",
+    "outcome": "timeout",
+    "cause": "Driver handoff consumed most of the fixed four-minute lease before the child started; the report arrived after its original expiry.",
+    "evidence": {
+      "dispatched_at": "2026-11-06T16:43:36.935Z",
+      "acknowledged_at": "2026-11-06T16:47:14.865Z",
+      "expires_at": "2026-11-06T16:47:33.963Z",
+      "reported_at": "2026-11-06T16:48:04.072Z"
+    },
+    "recovery": "Retried only judge once with a new independent child, unchanged four-minute budget, same responses and frozen rubric. Original late result is preserved but is not used as the successful judgement.",
+    "retry_attempt": "a0bfb3c98"
   }
 ]

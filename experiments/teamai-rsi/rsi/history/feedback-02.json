@@ -1,0 +1,138 @@
+{
+  "incumbent_hard_summary": {
+    "cases": 6,
+    "decision_correct": 6,
+    "hard_passed": 6
+  },
+  "incumbent_semantic_judgement": {
+    "semantic_pass": true,
+    "case_results": {
+      "D01": {
+        "pass": true,
+        "problems": [],
+        "observations_supported": true,
+        "decisive_evidence_explained": true,
+        "recommendations_proportionate": true
+      },
+      "D02": {
+        "pass": true,
+        "problems": [],
+        "observations_supported": true,
+        "decisive_evidence_explained": true,
+        "recommendations_proportionate": true
+      },
+      "D03": {
+        "pass": true,
+        "problems": [],
+        "observations_supported": true,
+        "decisive_evidence_explained": true,
+        "recommendations_proportionate": true
+      },
+      "D04": {
+        "pass": true,
+        "problems": [],
+        "observations_supported": true,
+        "decisive_evidence_explained": true,
+        "recommendations_proportionate": true
+      },
+      "D05": {
+        "pass": true,
+        "problems": [],
+        "observations_supported": true,
+        "decisive_evidence_explained": true,
+        "recommendations_proportionate": true
+      },
+      "D06": {
+        "pass": true,
+        "problems": [],
+        "observations_supported": true,
+        "decisive_evidence_explained": true,
+        "recommendations_proportionate": true
+      }
+    }
+  },
+  "previous_rounds": [
+    {
+      "round": 1,
+      "hypothesis": "The supplied development feedback reports complete hard and semantic passes for all six incumbent tasks, so no observed failure justifies adding rules. Consolidating the role, reading, evaluation, and reporting clauses should preserve a complete pass on every development task while reducing trimmed Unicode codepoint count from 580 to 478 (17.59%). This is falsified by any development regression; adoption still requires independent evaluation under the fixed rule. The candidate has not been evaluated. Character reduction is only a context-length proxy, not evidence of token, cost, or general quality improvement.",
+      "changes": [
+        "Consolidate the opening reviewer instructions into one concise paragraph; preserve the repository, history-access, and designated runtime-output restrictions verbatim."
+      ],
+      "decision": {
+        "schema_version": "rsi-decision-v1",
+        "round": 1,
+        "taskpack": "rsi/eval/dev/tasks.json",
+        "action": "adopt",
+        "adopt": true,
+        "valid_comparison": true,
+        "reason": "all_cases_pass_with_shorter_instructions",
+        "baseline": {
+          "complete_passed": 6,
+          "cases": 6,
+          "codepoints": 580,
+          "sha256": "d0999ce78482f532c65f34dcc0463792a258c32783f741910c0f8581d246c858"
+        },
+        "candidate": {
+          "complete_passed": 6,
+          "cases": 6,
+          "codepoints": 478,
+          "sha256": "90531104083796356cea1d4714305dfc0c9fa84c9ded45cf66917265207b83eb"
+        },
+        "gates": {
+          "baseline": {
+            "schema": true,
+            "integrity": true,
+            "semantic": true,
+            "suite_version": "rsi-review-suite-v1",
+            "split": "dev"
+          },
+          "candidate": {
+            "schema": true,
+            "integrity": true,
+            "semantic": true,
+            "suite_version": "rsi-review-suite-v1",
+            "split": "dev"
+          }
+        },
+        "improved_cases": [],
+        "regressed_cases": [],
+        "codepoint_reduction_fraction": 0.17586206896551723,
+        "case_results": {
+          "D01": {
+            "incumbent_complete": true,
+            "candidate_complete": true
+          },
+          "D02": {
+            "incumbent_complete": true,
+            "candidate_complete": true
+          },
+          "D03": {
+            "incumbent_complete": true,
+            "candidate_complete": true
+          },
+          "D04": {
+            "incumbent_complete": true,
+            "candidate_complete": true
+          },
+          "D05": {
+            "incumbent_complete": true,
+            "candidate_complete": true
+          },
+          "D06": {
+            "incumbent_complete": true,
+            "candidate_complete": true
+          }
+        },
+        "policy": {
+          "max_rounds": 3,
+          "min_new_complete_cases": 1,
+          "requires_no_regressions": true,
+          "min_codepoint_reduction_percent": 15,
+          "length_measure": "Python len(text.strip()), Unicode codepoints",
+          "length_claim": "context_length_proxy_only_not_token_or_cost_savings"
+        }
+      }
+    }
+  ],
+  "allowed_improvement": "Use development evidence only. Keep task-independent constraints. Retain is allowed. Do not read holdout tasks/oracles or modify evaluator, model, budget, or authorization boundaries."
+}

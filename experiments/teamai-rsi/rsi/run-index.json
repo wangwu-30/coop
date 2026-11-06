@@ -1,9 +1,26 @@
 {
   "baseline": "rsi/candidates/v0.md",
   "baseline_outputs": "rsi/history/baseline/outputs.json",
-  "incumbent": "rsi/candidates/v0.md",
-  "incumbent_outputs": "rsi/history/baseline/outputs.json",
-  "rounds": [],
+  "incumbent": "rsi/candidates/v1.md",
+  "incumbent_outputs": "rsi/history/round-01/outputs.json",
+  "rounds": [
+    {
+      "round": 1,
+      "run": "ra66a9bf598590a61",
+      "source_revision": "babbb598ab3a0e2457e288ede4ff5b046faff023",
+      "candidate": "rsi/candidates/v1.md",
+      "outputs": "rsi/history/round-01/outputs.json",
+      "action": "adopt",
+      "reason": "all_cases_pass_with_shorter_instructions",
+      "incumbent_before": "rsi/candidates/v0.md",
+      "incumbent_after": "rsi/candidates/v1.md",
+      "complete_passed": 6,
+      "cases": 6,
+      "before_codepoints": 580,
+      "candidate_codepoints": 478,
+      "codepoint_reduction_fraction": 0.17586206896551723
+    }
+  ],
   "holdout_started": false,
   "github_repository": "wangwu-30/coop",
   "github_branch": "teamai-rsi-20261107",

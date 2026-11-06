@@ -1,0 +1,52 @@
+{
+  "kind": "output",
+  "output": {
+    "judgement": {
+      "semantic_pass": true,
+      "case_results": {
+        "D01": {
+          "pass": true,
+          "problems": [],
+          "observations_supported": true,
+          "decisive_evidence_explained": true,
+          "recommendations_proportionate": true
+        },
+        "D02": {
+          "pass": true,
+          "problems": [],
+          "observations_supported": true,
+          "decisive_evidence_explained": true,
+          "recommendations_proportionate": true
+        },
+        "D03": {
+          "pass": true,
+          "problems": [],
+          "observations_supported": true,
+          "decisive_evidence_explained": true,
+          "recommendations_proportionate": true
+        },
+        "D04": {
+          "pass": true,
+          "problems": [],
+          "observations_supported": true,
+          "decisive_evidence_explained": true,
+          "recommendations_proportionate": true
+        },
+        "D05": {
+          "pass": true,
+          "problems": [],
+          "observations_supported": true,
+          "decisive_evidence_explained": true,
+          "recommendations_proportionate": true
+        },
+        "D06": {
+          "pass": true,
+          "problems": [],
+          "observations_supported": true,
+          "decisive_evidence_explained": true,
+          "recommendations_proportionate": true
+        }
+      }
+    }
+  }
+}
