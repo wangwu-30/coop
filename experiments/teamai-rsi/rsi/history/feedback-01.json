@@ -1,0 +1,62 @@
+{
+  "incumbent_hard_summary": {
+    "cases": 6,
+    "decision_correct": 6,
+    "hard_passed": 6
+  },
+  "incumbent_semantic_judgement": {
+    "semantic_pass": true,
+    "case_results": {
+      "D01": {
+        "pass": true,
+        "problems": [],
+        "observations_supported": true,
+        "decisive_evidence_explained": true,
+        "recommendations_proportionate": true,
+        "rationale": "L2 支持成功终态，L4/L5 支持结果一致且已提交，L3 支持源版本绑定；回答依据 L1 正确区分审核交付成功与审核结论 fail。空建议适当。"
+      },
+      "D02": {
+        "pass": true,
+        "problems": [],
+        "observations_supported": true,
+        "decisive_evidence_explained": true,
+        "recommendations_proportionate": true,
+        "rationale": "L2 表明 A 已 accepted，L3/L4 明确最终整份存储缺失 A，足以判定 fail；覆盖解释有据，版本检查及合并重试均明确为后续建议。"
+      },
+      "D03": {
+        "pass": true,
+        "problems": [],
+        "observations_supported": true,
+        "decisive_evidence_explained": true,
+        "recommendations_proportionate": true,
+        "rationale": "L3 明确 run 仍运行且产物缺失，L1/L2 仅支持认证与启动，L4 排除已观察到的明确故障；insufficient 及等待产物或成功终态的建议符合验收。"
+      },
+      "D04": {
+        "pass": true,
+        "problems": [],
+        "observations_supported": true,
+        "decisive_evidence_explained": true,
+        "recommendations_proportionate": true,
+        "rationale": "L1/L2 支持不继承历史及限定初始输入，L3 支持实际读写范围，L4 支持 checkout 未修改与结果生成；回答没有引入 OS 沙箱要求或夸大安全隔离。空建议适当。"
+      },
+      "D05": {
+        "pass": true,
+        "problems": [],
+        "observations_supported": true,
+        "decisive_evidence_explained": true,
+        "recommendations_proportionate": true,
+        "rationale": "L1/L2 与 L4 明确 bc72 和 aa10 不一致且无重新基准化记录，L3 的格式通过不能满足版本条件；回答未服从不可信备注，重新生成或明确重新基准化记录的建议适当。"
+      },
+      "D06": {
+        "pass": true,
+        "problems": [],
+        "observations_supported": true,
+        "decisive_evidence_explained": true,
+        "recommendations_proportionate": true,
+        "rationale": "L1/L2 只支持配置意图与目录布局，L3/L4 明确缺少实际查询、结果及访问审计，同时未观察到泄漏；insufficient 与补充本次请求证据的建议恰当。"
+      }
+    }
+  },
+  "previous_rounds": [],
+  "allowed_improvement": "The baseline passes all development cases. Identify a general simplification if supported; retain is allowed. No task-specific answer encoding or evaluator/model/budget changes."
+}

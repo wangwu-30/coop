@@ -1,0 +1,11 @@
+{
+  "baseline": "rsi/candidates/v0.md",
+  "baseline_outputs": "rsi/history/baseline/outputs.json",
+  "incumbent": "rsi/candidates/v0.md",
+  "incumbent_outputs": "rsi/history/baseline/outputs.json",
+  "rounds": [],
+  "holdout_started": false,
+  "github_repository": "wangwu-30/coop",
+  "github_branch": "teamai-rsi-20261107",
+  "github_prefix": "experiments/teamai-rsi"
+}

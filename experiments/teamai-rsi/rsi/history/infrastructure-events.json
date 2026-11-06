@@ -1,0 +1,17 @@
+[
+  {
+    "run": "rcd8334965689c92d",
+    "stage": "verify",
+    "outcome": "failed",
+    "code": "read_only_dirty",
+    "cause": "Python evaluator import generated __pycache__; fixed both workflows to run python3 -B."
+  },
+  {
+    "run": "rdb1509ed0234a9b8",
+    "attempt": "a81b8a089",
+    "stage": "verify",
+    "outcome": "timeout",
+    "evidence": "No place or command result file was created; only lease job metadata existed.",
+    "recovery": "Retried verify once using the same run and fixed definition in one persistent terminal; verify completed, then semantic judge completed. Environment-lifecycle diagnosis is supported by this recovery, not a general product defect claim."
+  }
+]
